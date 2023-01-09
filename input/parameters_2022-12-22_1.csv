@@ -1,0 +1,17 @@
+parameter,Location name,Start date,End date,removal start date,removal end date,mixing day,Htank,ri,annual manure input and washout,Freeboard,Sludge,Initial manure depth,manure depth after removal,Total volatile solid,Temp phase constant,Latitude,Solar absorptivity,Extraterrestrial solar flux density,Atmospheric transimttance,Altitude,Emissivity,Soil density,Soil thermal conductivity ,Soil specific heat
+value,VA,6/18/2020,6/17/2023,7/8/2020,7/9/2020,5,3,10,1400,0.3,0.5,0.599,0.525,0.08,4.1,59.5574,0.8,1395,0.75,13,0.95,1800,1.7,1220
+,,,,8/30/2020,9/4/2020,,,,20,,,,1.015,,,,,,,,,,,
+,,,,10/17/2020,10/18/2020,,,,,,,,1.1,,,,,,,,,,,
+,,,,2/28/2021,3/2/2021,,,,,,,,,,,,,,,,,,,
+,,,,7/8/2020,7/9/2020,,,,,,,,,,,,,,,,,,,
+,,,,8/30/2020,9/4/2020,,,,,,,,,,,,,,,,,,,
+,,,,10/17/2020,10/18/2020,,,,,,,,,,,,,,,,,,,
+,,,,2/28/2021,3/2/2021,,,,,,,,,,,,,,,,,,,
+,,,,7/8/2021,7/9/2021,,,,,,,,,,,,,,,,,,,
+,,,,8/30/2021,9/4/2021,,,,,,,,,,,,,,,,,,,
+,,,,10/17/2021,10/18/2021,,,,,,,,,,,,,,,,,,,
+,,,,2/28/2022,3/2/2022,,,,,,,,,,,,,,,,,,,
+,,,,7/8/2022,7/9/2022,,,,,,,,,,,,,,,,,,,
+,,,,8/30/2022,9/4/2022,,,,,,,,,,,,,,,,,,,
+,,,,10/17/2022,10/18/2022,,,,,,,,,,,,,,,,,,,
+,,,,2/28/2023,3/2/2023,,,,,,,,,,,,,,,,,,,

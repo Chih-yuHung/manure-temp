@@ -18,9 +18,9 @@ l<-l+2
 if (submodels == 1) {
   #Shade/output to an excel file
   write.csv(temp.four,paste("C:/Users/hungc/OneDrive - AGR-AGR/AAFC/Project 3_Sweden/3. Results/Fittja/with shade/"
-                         ,Location,"_fourdate",Sys.Date(),".csv",sep=""),row.names = FALSE)
+                         ,"_fourdate",Sys.Date(),".csv",sep=""),row.names = FALSE)
 } else {
   #Without shade/output to an excel file
   write.csv(temp.four,paste("C:/Users/hungc/OneDrive - AGR-AGR/AAFC/Project 3_Sweden/3. Results/Fittja/original/"
-                         ,Location,"_fourdate",Sys.Date(),".csv",sep=""),row.names = FALSE)
+                         ,"_fourdate",Sys.Date(),".csv",sep=""),row.names = FALSE)
 }
