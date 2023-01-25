@@ -8,24 +8,21 @@ Enthalpy.c <- ifelse(M.Temp[,288] < 272.15,M.Temp[,288]*rho.m*M.volume*C.pm/10^6
 
 
 if (submodels == 1) {
- if (203 <= T.day & T.day <= 220) {
-   In.M.temp <- Tmean + 10
-   } else {
    In.M.temp <- Avg.Barn.temp + Barn.temp.amp*sin(2*pi/365*T.day + Temp.cost) #Incoming manure temp, L49,L39
- } 
  #In.M.temp <- annualT #not better than the original result
  #In.M.temp <- Tmean # bad
  #In.M.temp <- ifelse(Tmean<=0,0,Tmean*0.6488+6.7341) #based on three meaurement, bad results.
  #Assumed the M.Temp is well mixed after every 5 day
- #because of manure input
+
+  #because of manure input
   if (snow > 0) {
     if (i %% mixing.day == 0) {
       #incoming Manure from the sump pit  
-      depthchange.d <- sum(M.daily[(i - 4):i]) + precip.d - Evap.depth.d
+      depthchange.d <- sum(M.daily[ (i - mixing.day + 1):i]) + precip.d - Evap.depth.d
       if (M.depth <= 1.5) {
-        M.Temp[21:30,288] <- mean(M.Temp[21:30,288])
+        M.Temp[mix.pattern1,288] <- mean(M.Temp[mix.pattern1,288])
       } else {
-        M.Temp[26:30,288] <- mean(M.Temp[26:30,288])  
+        M.Temp[mix.pattern2,288] <- mean(M.Temp[mix.pattern2,288])  
       }
     } else{
       depthchange.d <- precip.d - Evap.depth.d      #without manure input
@@ -42,11 +39,11 @@ if (submodels == 1) {
   } else { 
    if (i %% mixing.day == 0) {
   #incoming Manure from the sump pit  
-  depthchange.d <- sum(M.daily[(i - 4):i]) + precip.d - Evap.depth.d
+  depthchange.d <- sum(M.daily[(i - mixing.day + 1):i]) + precip.d - Evap.depth.d
   if (M.depth <= 1.5) {
-  M.Temp[21:30,288] <- mean(M.Temp[21:30,288])
+  M.Temp[mix.pattern1,288] <- mean(M.Temp[mix.pattern1,288])
   } else {
-  M.Temp[26:30,288] <- mean(M.Temp[26:30,288])  
+  M.Temp[mix.pattern2,288] <- mean(M.Temp[mix.pattern2,288])  
   }
   } else{
   depthchange.d <- precip.d - Evap.depth.d      #without manure input
@@ -84,9 +81,9 @@ Final.M.Temp <- ifelse(Enthalpy.V < E.272, 272.15*Enthalpy.V/E.272,
                             272.15 + (Enthalpy.V - E.272)/fusion))
 if (submodels == 1) {
   if (M.depth <= 1.5) {
-    Final.M.Temp[21:30] <- mean(Final.M.Temp[21:30])
+    Final.M.Temp[mix.pattern1] <- mean(Final.M.Temp[mix.pattern1])
   } else {
-    Final.M.Temp[26:30] <- mean(Final.M.Temp[26:30])  
+    Final.M.Temp[mix.pattern2] <- mean(Final.M.Temp[mix.pattern2])  
   }
 }
 

@@ -5,38 +5,47 @@
 #Spring: 122-171 (May 1, 2020-June 19,2020), Summer: 172-265 (June 20,2020,Sept 21)
 #Fall: 266-355 (Sept 22, 2020-Dec 20,2020), Winter:356-58 (Dec 21,2020-Feb 27, 2021)
 #2020 is a leap year
+library(lubridate)
+
+#force the simulation length = observation
+obs.n <- nrow(na.omit(obs))
+obs <- obs[1:obs.n,]
+sim.og <- sim.og[1:obs.n,]
+sim.re <- sim.re[1:obs.n,]
+
+obs$DOY[which(leap_year(obs$Year))] <- obs$DOY[which(leap_year(obs$Year))]-1
 
 #organize data for the last year and seasons
 #Observed manure temperature
-obs.Fittja[,9] <- obs.Fittja$Depth*100
-colnames(obs.Fittja)[9] <- "Depth.cm"
-obs.n <- nrow(na.omit(obs.Fittja))
-Spring.obs.Fittja <- obs.Fittja[122 <= obs.Fittja$DOY & obs.Fittja$DOY <= 171,]
-Summer.obs.Fittja <- obs.Fittja[172 <= obs.Fittja$DOY & obs.Fittja$DOY <= 265,]
-Fall.obs.Fittja   <- obs.Fittja[266 <= obs.Fittja$DOY & obs.Fittja$DOY <= 355,]
-Winter.obs.Fittja <- rbind(obs.Fittja[356 <= obs.Fittja$DOY,],
-                          obs.Fittja[obs.Fittja$DOY <= 58,])
-obs.Fittja.y      <- list(obs.Fittja[1:obs.n,], 
-                         Spring.obs.Fittja, Summer.obs.Fittja
-                         ,Fall.obs.Fittja, Winter.obs.Fittja)
-length(na.omit(obs.Fittja$temp.avg))
+obs[,9] <- obs$Depth*100
+colnames(obs)[9] <- "Depth.cm"
+
+Spring.obs <- obs[122 <= obs$DOY & obs$DOY <= 171,]
+Summer.obs <- obs[172 <= obs$DOY & obs$DOY <= 265,]
+Fall.obs   <- obs[266 <= obs$DOY & obs$DOY <= 355,]
+Winter.obs <- rbind(obs[356 <= obs$DOY,],
+                          obs[obs$DOY <= 121,])
+obs.y      <- list(obs[1:obs.n,], 
+                         Spring.obs, Summer.obs
+                         ,Fall.obs, Winter.obs)
+length(na.omit(obs$temp.avg))
 #The simulation results from original model 
-Spring.sim.og <- sim.Fittja.og[122 <= sim.Fittja.og$DOY & sim.Fittja.og$DOY <= 171,]
-Summer.sim.og <- sim.Fittja.og[172 <= sim.Fittja.og$DOY & sim.Fittja.og$DOY <= 265,]
-Fall.sim.og   <- sim.Fittja.og[266 <= sim.Fittja.og$DOY & sim.Fittja.og$DOY <= 355,]
-Winter.sim.og <- rbind(sim.Fittja.og[356 <= sim.Fittja.og$DOY,],
-                      sim.Fittja.og[sim.Fittja.og$DOY <= 59,])
-sim.Fittja.og.y <- list(sim.Fittja.og[1:obs.n,],
+Spring.sim.og <- sim.og[122 <= sim.og$DOY & sim.og$DOY <= 171,]
+Summer.sim.og <- sim.og[172 <= sim.og$DOY & sim.og$DOY <= 265,]
+Fall.sim.og   <- sim.og[266 <= sim.og$DOY & sim.og$DOY <= 355,]
+Winter.sim.og <- rbind(sim.og[356 <= sim.og$DOY,],
+                      sim.og[sim.og$DOY <= 121,])
+sim.og.y <- list(sim.og[1:obs.n,],
                        Spring.sim.og, Summer.sim.og
                        ,Fall.sim.og, Winter.sim.og)
 
 #The simulation results with revised model
-Spring.sim <- sim.Fittja[122 <= sim.Fittja$DOY & sim.Fittja$DOY <= 171,]
-Summer.sim <- sim.Fittja[172 <= sim.Fittja$DOY & sim.Fittja$DOY <= 265,]
-Fall.sim   <- sim.Fittja[266 <= sim.Fittja$DOY & sim.Fittja$DOY <= 355,]
-Winter.sim <- rbind(sim.Fittja[356 <= sim.Fittja$DOY,],
-                      sim.Fittja[sim.Fittja$DOY <= 59,])
-sim.Fittja.y <- list(sim.Fittja[1:obs.n,], 
+Spring.sim <- sim.re[122 <= sim.re$DOY & sim.re$DOY <= 171,]
+Summer.sim <- sim.re[172 <= sim.re$DOY & sim.re$DOY <= 265,]
+Fall.sim   <- sim.re[266 <= sim.re$DOY & sim.re$DOY <= 355,]
+Winter.sim <- rbind(sim.re[356 <= sim.re$DOY,],
+                      sim.re[sim.re$DOY <= 121,])
+sim.re.y <- list(sim.re[1:obs.n,], 
                     Spring.sim, Summer.sim
                     ,Fall.sim, Winter.sim)
 
@@ -52,7 +61,7 @@ stat.avg <- data.frame(Depth = c("sample size",rep(c("Avg.","0.5 m","1.5 m", "2.
                       )
 #the sample size
 for (i in 1:5) {
-stat.avg[1, c(2 * i + 1)] <- nrow(obs.Fittja.y[[i]]) 
+stat.avg[1, c(2 * i + 1)] <- nrow(obs.y[[i]]) 
 }
 
 #RMSE caculation only for the last year
@@ -88,17 +97,17 @@ stat <- list(RMSE,D,rsq,bias)
 for (i in 1:16) {
   for (j in 1:5) {
     if (i <= 4) {
-    stat.avg[i + 1,2*j + 1] <- stat[[i]](sim.Fittja.og.y[[j]]$Temperature.C
-                          ,obs.Fittja.y[[j]]$temp.avg)
+    stat.avg[i + 1,2*j + 1] <- stat[[i]](sim.og.y[[j]]$Temperature.C
+                          ,obs.y[[j]]$temp.avg)
     } else if (4 < i & i <= 8) {
-    stat.avg[i + 1,2*j + 1] <- stat[[i - 4]](sim.Fittja.og.y[[j]]$temp.05
-                                   ,obs.Fittja.y[[j]]$temp0.5)  
+    stat.avg[i + 1,2*j + 1] <- stat[[i - 4]](sim.og.y[[j]]$temp.05
+                                   ,obs.y[[j]]$temp0.5)  
     } else if (8 < i & i <= 12) {
-    stat.avg[i + 1,2*j + 1] <- stat[[i - 8]](sim.Fittja.og.y[[j]]$temp.15
-                                   ,obs.Fittja.y[[j]]$temp1.5)  
+    stat.avg[i + 1,2*j + 1] <- stat[[i - 8]](sim.og.y[[j]]$temp.15
+                                   ,obs.y[[j]]$temp1.5)  
     } else {
-    stat.avg[i + 1,2*j + 1] <- stat[[i - 12]](sim.Fittja.og.y[[j]]$temp.25
-                                   ,obs.Fittja.y[[j]]$temp2.5)  
+    stat.avg[i + 1,2*j + 1] <- stat[[i - 12]](sim.og.y[[j]]$temp.25
+                                   ,obs.y[[j]]$temp2.5)  
     }
   }  
 }
@@ -107,17 +116,17 @@ for (i in 1:16) {
 for (i in 1:16) {
   for (j in 1:5) {
     if (i <= 4) {
-      stat.avg[i + 1,2*j + 2] <- stat[[i]](sim.Fittja.y[[j]]$Temperature.C
-                                   ,obs.Fittja.y[[j]]$temp.avg)
+      stat.avg[i + 1,2*j + 2] <- stat[[i]](sim.re.y[[j]]$Temperature.C
+                                   ,obs.y[[j]]$temp.avg)
     } else if (4 < i & i <= 8) {
-      stat.avg[i + 1,2*j + 2] <- stat[[i - 4]](sim.Fittja.y[[j]]$temp.05
-                                     ,obs.Fittja.y[[j]]$temp0.5)  
+      stat.avg[i + 1,2*j + 2] <- stat[[i - 4]](sim.re.y[[j]]$temp.05
+                                     ,obs.y[[j]]$temp0.5)  
     } else if (8 < i & i <= 12) {
-      stat.avg[i + 1,2*j + 2] <- stat[[i - 8]](sim.Fittja.y[[j]]$temp.15
-                                     ,obs.Fittja.y[[j]]$temp1.5)  
+      stat.avg[i + 1,2*j + 2] <- stat[[i - 8]](sim.re.y[[j]]$temp.15
+                                     ,obs.y[[j]]$temp1.5)  
     } else {
-      stat.avg[i + 1,2*j + 2] <- stat[[i - 12]](sim.Fittja.y[[j]]$temp.25
-                                      ,obs.Fittja.y[[j]]$temp2.5)  
+      stat.avg[i + 1,2*j + 2] <- stat[[i - 12]](sim.re.y[[j]]$temp.25
+                                      ,obs.y[[j]]$temp2.5)  
     }
   }  
 }
@@ -130,26 +139,26 @@ stat.avg.depth <- data.frame(stat.name = c("sample size","RMSE","D","R2","Bias")
                        stringsAsFactors = FALSE
 )
 
-H.50 <- 0.5 * Htank * 100 #convert to cm 
+H.50 <- 0.5 * Htank * 100 #convert 50% tank height to cm 
 #obtain the days have <50% and >=50% depth
-og.s <- which(sim.Fittja.og.y[[1]]$Depth.cm < H.50)
-og.d <- which(sim.Fittja.og.y[[1]]$Depth.cm >= H.50)
-mod.s <- which(sim.Fittja.y[[1]]$Depth.cm < H.50)
-mod.d <- which(sim.Fittja.y[[1]]$Depth.cm >= H.50)
+og.s <- which(sim.og.y[[1]]$Depth.cm < H.50)
+og.d <- which(sim.og.y[[1]]$Depth.cm >= H.50)
+mod.s <- which(sim.re.y[[1]]$Depth.cm < H.50)
+mod.d <- which(sim.re.y[[1]]$Depth.cm >= H.50)
 
 #sample size
 stat.avg.depth[1,2:5] <- round(c(length(og.s),length(mod.s),length(og.d),length(mod.d)),0) 
 
 #stat by year and seasons for the original model 
 for (i in 1:4) {
-  stat.avg.depth[i + 1,2] <- stat[[i]](sim.Fittja.og.y[[1]]$Temperature.C[og.s]
-                                       ,obs.Fittja.y[[1]]$temp.avg[og.s])
-  stat.avg.depth[i + 1,3] <- stat[[i]](sim.Fittja.y[[1]]$Temperature.C[mod.s]
-                                   ,obs.Fittja.y[[1]]$temp.avg[mod.s])
-  stat.avg.depth[i + 1,4] <- stat[[i]](sim.Fittja.og.y[[1]]$Temperature.C[og.d]
-                                  ,obs.Fittja.y[[1]]$temp.avg[og.d]) 
-  stat.avg.depth[i + 1,5] <- stat[[i]](sim.Fittja.y[[1]]$Temperature.C[mod.d]
-                                   ,obs.Fittja.y[[1]]$temp.avg[mod.d]) 
+  stat.avg.depth[i + 1,2] <- stat[[i]](sim.og.y[[1]]$Temperature.C[og.s]
+                                       ,obs.y[[1]]$temp.avg[og.s])
+  stat.avg.depth[i + 1,3] <- stat[[i]](sim.re.y[[1]]$Temperature.C[mod.s]
+                                   ,obs.y[[1]]$temp.avg[mod.s])
+  stat.avg.depth[i + 1,4] <- stat[[i]](sim.og.y[[1]]$Temperature.C[og.d]
+                                  ,obs.y[[1]]$temp.avg[og.d]) 
+  stat.avg.depth[i + 1,5] <- stat[[i]](sim.re.y[[1]]$Temperature.C[mod.d]
+                                   ,obs.y[[1]]$temp.avg[mod.d]) 
   }
 
 
@@ -181,27 +190,35 @@ Output.tank[18,2] <- max(Output$Depth.cm)       #Maximum Manure Depth
 
 #write the results out
 library(xlsx)
-manure.pic <- paste(result,"Fittja/figures/png/",Location,"_",test,".png",sep = "")
+manure.pic <- paste(result,Location,"/figures/png/",Location,"_",test,".png",sep = "")
 wb <- createWorkbook()
 sheet <- createSheet(wb, "pic")
 addPicture(manure.pic, sheet, startRow = 1, startColumn = 1)
-saveWorkbook(wb, file = paste("C:/Users/hungc/OneDrive - AGR-AGR/AAFC/Project 3_Sweden/3. Results/Fittja/stat/OR_",
+saveWorkbook(wb, file = paste(result,Location,"/stat/",Location,"_",
 test,".xlsx",sep = ""), password = NULL)
+write.xlsx(sim.og,
+           file = paste(result,Location,"/stat/",Location,"_",
+                        test,".xlsx",sep = ""),
+           sheetName = "Output.og", row.names = F, append = TRUE)
+write.xlsx(sim.re,
+             file = paste(result,Location,"/stat/",Location,"_",
+                          test,".xlsx",sep = ""),
+             sheetName = "Output.re", row.names = F, append = TRUE)
 
-write.xlsx(stat.avg,
-           file = paste("C:/Users/hungc/OneDrive - AGR-AGR/AAFC/Project 3_Sweden/3. Results/Fittja/stat/OR_",
+  write.xlsx(stat.avg,
+           file = paste(result,Location,"/stat/",Location,"_",
                         test,".xlsx",sep = ""),
-               sheetName = "OR site", row.names = F, append = TRUE)
+               sheetName = "overall stat", row.names = F, append = TRUE)
 write.xlsx(stat.avg.depth,
-           file = paste("C:/Users/hungc/OneDrive - AGR-AGR/AAFC/Project 3_Sweden/3. Results/Fittja/stat/OR_",
-                       test,".xlsx",sep = ""),
-           sheetName = "OR site_depth", row.names = F,append = TRUE)
-write.xlsx(Output.tank,
-           file = paste("C:/Users/hungc/OneDrive - AGR-AGR/AAFC/Project 3_Sweden/3. Results/Fittja/stat/OR_",
+           file = paste(result,Location,"/stat/",Location,"_",
                         test,".xlsx",sep = ""),
-           sheetName = "output summary_revised", row.names = F,append = TRUE)
+           sheetName = "stat by depth", row.names = F,append = TRUE)
+write.xlsx(Output.tank,
+           file = paste(result,Location,"/stat/",Location,"_",
+                        test,".xlsx",sep = ""),
+           sheetName = "output summary_revised model", row.names = F,append = TRUE)
 write.xlsx(parameters,
-           file = paste("C:/Users/hungc/OneDrive - AGR-AGR/AAFC/Project 3_Sweden/3. Results/Fittja/stat/OR_",
+           file = paste(result,Location,"/stat/",Location,"_",
                         test,".xlsx",sep = ""),
            sheetName = "Parameters", row.names = F,append = TRUE, showNA = FALSE)
 

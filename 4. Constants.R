@@ -1,18 +1,13 @@
-library(imputeTS) # for NA interpolation in soil temp
-
 #Create Soil and M temp matrix 
 S.Temp <- matrix(nrow = 300,ncol = 288)              #Soil temp
 M.Temp <- matrix(ncol = 288,nrow = 30)               #manure temp calculation, F133:KG162
 
-#to store daily manure.temp in the 30 layers
-manure.temp <- c()
-manure.depth <- c()
 
 # Set Output Headers and Write parameters to Output
-Output <- data.frame(matrix(ncol = 15,nrow = d.length - 365))
+Output <- data.frame(matrix(ncol = 16,nrow = d.length - 365))
 colnames(Output) <- c("Date ID","Year","Month","Day","DOY","Temperature.C","Depth.cm","Volume.m3"
                     ,"Evaporation.cm","Precipitation.cm","total radiation","snow depth"
-                    ,"temp.05","temp.15","temp.25")
+                    ,"temp.05","temp.15","temp.25","In.M.temp")
 Output$`Date ID` <- as.numeric(seq(as.Date(start.date), as.Date(end.date), by = "days"))
 Output$Year <- format(seq(as.Date(start.date),as.Date(end.date),by = "days"),"%Y")
 Output$Month <- format(seq(as.Date(start.date),as.Date(end.date),by = "days"),"%m")
@@ -51,10 +46,9 @@ fusion <- rho.m*C.pm.fusion/10^6                 # Fusion of manure
 #Air constant
 Pa <- 101325*exp(-A/8200)                     # Local air pressure, Pa
 e.sigma <- 5.67*10^-8                         # Stefan-Boltzmann constant, B25
-ka <- 0.025                                   # air thermal conductivity, W/(mK), it's sensitive in summer only; if higher -> lower manure temp
 Vair <- 14.2*10^-6                            # air kinematic viscosity, m2 s-1, B13
 Pr <- 0.714                                   # Air Prandtl Number, unitless, B12
-                                            # Evaporation rate calculation, Campbell&Norman, 1998.
+                                              # Evaporation rate calculation, Campbell&Norman, 1998.
 Teten.H2Oa <- 0.611                           # kPa, G9
 Teten.H2Ob <- 17.502                          # unitless, G10
 Teten.H2Oc <- 240.97                          # degree C, G11

@@ -10,7 +10,7 @@ if (Tmean <= 0 | AirTmax1 <= 3) {
   alpha.s  <- 1 - albedo
 } else {
   snow <- 0
-  alpha.s <- parameters[1,18]
+  alpha.s <- parameters[1,20]
   }
  
 #Obtain a model for albedo based on Perovich et al. 2017,
