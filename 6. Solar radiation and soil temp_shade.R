@@ -71,9 +71,6 @@ WVPD <- Teten.H2Oa*exp((Teten.H2Ob*T.air)/(Teten.H2Oc+T.air))*(1-Rh/100)
 #Evaporation per second (kg/s), F112:KG112
 E <- rho.w*(WVPD)*wind.f/(24*3600*1000)*Au
 Evap.depth.d <- sum(E*T.delta)/rho.w/Au #Incorporate daily evaporation, depth together
-#air emissivity, F116:KG116
-#in excel, the last part was (F95+273.15)^(1/7), F95 is T.hour
-#I replace F95+273.15 to T.air.K
 e.ac <- 1.72*(((Teten.H2Oa*exp((Teten.H2Ob*(T.air))/(Teten.H2Oc+(T.air)))*(Rh/100))/T.air.K)^(1/7))
 
 #cloud-corrected air emissivity, F117:KG117 
@@ -100,8 +97,8 @@ delta.T.radevap <- c(1:288)   #delta T-rad+evap, F115:KG115
 
 for (j in 1:288) {
   if (j == 1) {
-  T.conductivity[,j]<-ifelse(ini.M.Temp>=273.1500000000|ini.M.Temp<272.15000000000,k.m/C.pm,k.m/C.pm.fusion)
-  Cp[j]<-ifelse(ini.M.Temp[j]>=273.1500000000|ini.M.Temp[j]<272.15000000000,C.pm,C.pm.fusion)
+  T.conductivity[,j]<-ifelse(ini.M.Temp>=273.15|ini.M.Temp<272.15,k.m/C.pm,k.m/C.pm.fusion)
+  Cp[j]<-ifelse(ini.M.Temp[j]>=273.15|ini.M.Temp[j]<272.15,C.pm,C.pm.fusion)
   delta.T.evap[j]<-(-(E[j]*Lambda*T.delta))/(Cp[j]*(rho.m*Au*delta.z[1]))
   delta.T.radevap[j]<-(q.net.rad[j]*Au*T.delta-(e.sigma*Au*T.delta*(((epsilon*(ini.M.Temp[j])^4))-(e.a[j]*T.air.K[j]^4))))/(rho.m*Cp[j]*Au*delta.z[1])+delta.T.evap[j]
   M.Temp[1,j]<-(ini.M.Temp[j]+time.weight[1]*T.conductivity[1,j]*(Au*hcv.ms*T.air.K[j]+Au/delta.zd[1]*ini.M.Temp[j+1]))/(1+time.weight[1]*T.conductivity[1,j]*(Au*hcv.ms+Au/delta.zd[1]))+delta.T.radevap[j]
@@ -110,8 +107,8 @@ for (j in 1:288) {
   S.Temp[1,j]<-(ini.S.Temp[1]+soil.c*ks.cp*(Au/delta.depth*ini.M.Temp[30]+Au/dep.s*ini.S.Temp[2]))/(1+soil.c*ks.cp*(Au/delta.depth+Au/dep.s))
   S.Temp[2:299,j]<-(ini.S.Temp[2:299]+soil.c*ks.cp*(Au/dep.s*ini.S.Temp[1:298]+Au/dep.s*ini.S.Temp[3:300]))/(1+soil.c*ks.cp*(Au/dep.s+Au/dep.s))
   } else {
-  T.conductivity[,j]<-ifelse(M.Temp[,j-1]>=273.1500000000|M.Temp[,j-1]<272.15000000000,k.m/C.pm,k.m/C.pm.fusion)  
-  Cp[j]<-ifelse(M.Temp[1,j-1]>=273.1500000000|M.Temp[1,j-1]<272.15000000000,C.pm,C.pm.fusion)
+  T.conductivity[,j]<-ifelse(M.Temp[,j-1]>=273.15|M.Temp[,j-1]<272.15,k.m/C.pm,k.m/C.pm.fusion)  
+  Cp[j]<-ifelse(M.Temp[1,j-1]>=273.15|M.Temp[1,j-1]<272.15,C.pm,C.pm.fusion)
   delta.T.evap[j]<-(-(E[j]*Lambda*T.delta)/(Cp[j]*(rho.m*Au*delta.z[1])))
   delta.T.radevap[j]<-(q.net.rad[j]*Au*T.delta-(e.sigma*Au*T.delta*((epsilon*(M.Temp[1,j-1])^4)-(e.a[j]*T.air.K[j]^4))))/(rho.m*Cp[j]*Au*delta.z[1])+delta.T.evap[j]
   M.Temp[1,j]<-(M.Temp[1,j-1]+time.weight[1]*T.conductivity[1,j]*(Au*hcv.ms*T.air.K[j]+Au/delta.zd[1]*M.Temp[2,j-1]))/(1+time.weight[1]*T.conductivity[1,j]*(Au*hcv.ms+Au/delta.zd[1]))+delta.T.radevap[j]

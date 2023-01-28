@@ -30,8 +30,8 @@ if (mix.place == "top") {
   mix.pattern1 <- c(1:10) # depth < 1.5 m
   mix.pattern2 <- c(1:5)  # depth >= 1.5 m
 } else if (mix.place == "middle") {
-  mix.pattern1 <- c(10:20)
-  mix.pattern2 <- c(12:22)
+  mix.pattern1 <- c(11:20)
+  mix.pattern2 <- c(13:17)
 } else if (mix.place == "bottom") {
   mix.pattern1 <- c(21:30)
   mix.pattern2 <- c(26:30)
@@ -93,7 +93,7 @@ alpha.s <- parameters[1,20]     #solar absorptivity, B18, 0.8 in Tim's model
 Eb <- parameters[1,21]          #extraterrestrial solar flux density, W m-2
 tau <- parameters[1,22]         #Atmospheric transmittance, 0.75 clear, 0.4 overcast
 A <- parameters[1,23]           #altitude, m
-epsilon <- parameters[1,24]      #emissivity,B26
+epsilon <- parameters[1,24]     #emissivity,B26
 
 #Soil temperature properties 
 den.s <- parameters[1,25]     #Soil density, kg/m3, B41,Saturated Clay = 2000,
@@ -112,3 +112,6 @@ Cp.s <- parameters[1,27]      #specific heat of soil, J/(kgK), B45,
 
 #Air constant
 ka <- parameters[1,28]                                   # air thermal conductivity, W/(mK), it's sensitive in summer only; if higher -> lower manure temp
+Teten.H2Oa <- parameters[1,29]                          # kPa, G9
+Teten.H2Ob <- parameters[2,29]                          # unitless, G10
+Teten.H2Oc <- parameters[3,29]                          # degree C, G11

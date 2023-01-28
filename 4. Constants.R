@@ -49,9 +49,7 @@ e.sigma <- 5.67*10^-8                         # Stefan-Boltzmann constant, B25
 Vair <- 14.2*10^-6                            # air kinematic viscosity, m2 s-1, B13
 Pr <- 0.714                                   # Air Prandtl Number, unitless, B12
                                               # Evaporation rate calculation, Campbell&Norman, 1998.
-Teten.H2Oa <- 0.611                           # kPa, G9
-Teten.H2Ob <- 17.502                          # unitless, G10
-Teten.H2Oc <- 240.97                          # degree C, G11
+
 Teten.Iceb <- 21.87                           # unitless, G12
 Teten.Icec <- 265.5                           # degree C, G13
 rho.w <- 1000                                 # water density. kg/m3, G14

@@ -8,9 +8,11 @@ if (Tmean <= 0 | AirTmax1 <= 3) {
   albedo   <- (0.9280*snow/(0.3152 + snow)) #Pervocich et al. 2017
   max(0.55,albedo) # the minimum is 0.55 follow we did in the DNDC
   alpha.s  <- 1 - albedo
+  epsilon  <- 0.98
 } else {
   snow <- 0
   alpha.s <- parameters[1,20]
+  epsilon <- parameters[1,24]
   }
  
 #Obtain a model for albedo based on Perovich et al. 2017,

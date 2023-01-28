@@ -71,14 +71,17 @@ Enthalpy.V <- Enthalpy.c.new/M.volume.new  #Enthalpy/V, O209:O238
 }
 
 
-#Final temp after depth adjustment,Q209:Q238
-#This is actually the manure temperature after manure addition and we used this 
-#to be the new initial manure temp for the next day
+#Final temp after depth adjustment,
+#This is the new initial manure temp for the next day
 #not the manure temp at the end of the day!
 Final.M.Temp <- ifelse(Enthalpy.V < E.272, 272.15*Enthalpy.V/E.272,
                      ifelse(Enthalpy.V >= E.273, 
                             273.15 + (Enthalpy.V - E.273)*10^6/(C.pm*rho.m),
                             272.15 + (Enthalpy.V - E.272)/fusion))
+
+#simulated possible convective heat transfer
+
+
 if (submodels == 1) {
   if (M.depth <= 1.5) {
     Final.M.Temp[mix.pattern1] <- mean(Final.M.Temp[mix.pattern1])
