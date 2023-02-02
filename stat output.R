@@ -164,13 +164,13 @@ for (i in 1:4) {
 
 # Summary for the results, part 2. Only output after all simulation is done. 
 #The data of manure tank, i.e output L1:M18
-Output.tank <- data.frame(matrix(ncol = 2,nrow = 18))
-Output.tank[1:18,1] <- c("Location","SurfaceArea(m2)","Starting.Depth(m)"
+Output.tank <- data.frame(matrix(ncol = 2,nrow = 19))
+Output.tank[1:19,1] <- c("Location","SurfaceArea(m2)","Starting.Depth(m)"
                          ,"Starting.Volume.m3","Total.Solids(%)",""
                          ,"Tank.Storage","Total.Tank.Volume(m3)"
                          ,"Yearly Maximum Storage Volume.m3","Yearly.Rain.Volume.m3"
                          ,"Yearly.Manure.Storage.Volume.m3","Tank.Diameter.m",""
-                         ,"Average.Tm.C","Max.Tm.C","Min.Tm.C","","Max.d.cm")
+                         ,"Average.Tm.C","Max.Tm.C","Min.Tm.C","","Max.d.cm","annual snow.cm")
 Output.tank[1,2] <- Location
 Output.tank[2:3,2] <- c(Au,M.depth)        #area and initial depth, m2 and m
 Output.tank[4,2] <- as.numeric(Output.tank[2,2])*as.numeric(Output.tank[3,2]) #starting volume.
@@ -185,6 +185,7 @@ Output.tank[14,2] <- mean(Output$Temperature.C) #Avg. manure Temperature for the
 Output.tank[15,2] <- max(Output$Temperature.C)  #Max manure Temperature
 Output.tank[16,2] <- min(Output$Temperature.C)  #Min manure Temperature
 Output.tank[18,2] <- max(Output$Depth.cm)       #Maximum Manure Depth
+Output.tank[19,2] <- sum(Output$`snow depth`)       #Maximum Manure Depth
 
 
 

@@ -3,9 +3,9 @@
 #The snow is form when the temperature is below 0
 Tmean <- (AirTmax1 + AirTmin1)/2
 snow <- c() # cm
-if (Tmean <= 0 | AirTmax1 <= 3) {
+if (Tmean <= 0 | AirTmax1 <= 1) {
   snow     <- precip.d*100*10 #precipt.d is m, turn to cm and *10 to snow  
-  albedo   <- (0.9280*snow/(0.3152 + snow)) #Pervocich et al. 2017
+  albedo   <- (0.9280*snow/(0.3152 + snow)) #Perovich et al. 2007
   max(0.55,albedo) # the minimum is 0.55 follow we did in the DNDC
   alpha.s  <- 1 - albedo
   epsilon  <- 0.98
@@ -14,8 +14,16 @@ if (Tmean <= 0 | AirTmax1 <= 3) {
   alpha.s <- parameters[1,20]
   epsilon <- parameters[1,24]
   }
- 
-#Obtain a model for albedo based on Perovich et al. 2017,
+
+#The number 1 degree for AirTamx1 from Jennings et al., 2018 
+#https://doi.org/10.1038/s41467-018-03629-7
+
+#Snow melting
+
+
+
+
+#Obtain a model for albedo based on Perovich et al. 2007,
 #Light reflection and transmission by a temperate snow cover
  # depth<-c(0,0.25,0.5,1.5,3,5,8,10,12,15) #snow depth, cm
  # albe<-c(0.2,0.38,0.6,0.78,0.82,0.88,0.88,0.89,0.91,0.92) #albedo

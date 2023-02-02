@@ -115,3 +115,8 @@ ka <- parameters[1,28]                                   # air thermal conductiv
 Teten.H2Oa <- parameters[1,29]                          # kPa, G9
 Teten.H2Ob <- parameters[2,29]                          # unitless, G10
 Teten.H2Oc <- parameters[3,29]                          # degree C, G11
+
+#Water constant
+f.point <- parameters[1,30]  #freezing point
+t.point <- parameters[2,30]  #thawing point
+  

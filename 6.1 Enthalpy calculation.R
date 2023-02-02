@@ -2,9 +2,10 @@
 
 #Temp and depth adjustment, F200:Q238
 #Current enthalpy, J209:J238
-Enthalpy.c <- ifelse(M.Temp[,288] < 272.15,M.Temp[,288]*rho.m*M.volume*C.pm/10^6
-                   ,ifelse(M.Temp[,288] >= 273.15,(272.15*rho.m*M.volume*C.pm + rho.m*M.volume*C.pm.fusion +  (M.Temp[,288] - 273.15)*rho.m*M.volume*C.pm)/10^6
-                           ,(272.15*rho.m*M.volume*C.pm + (M.Temp[,288] - 272.15)*rho.m*M.volume*C.pm.fusion)/10^6))
+Enthalpy.c <- ifelse(M.Temp[,288] < f.point,M.Temp[,288]*rho.m*M.volume*C.pm/10^6
+                   ,ifelse(M.Temp[,288] >= t.point,(f.point*rho.m*M.volume*C.pm + rho.m*M.volume*C.pm.fusion + 
+                                                      (M.Temp[,288] - t.point)*rho.m*M.volume*C.pm)/10^6
+                           ,(f.point*rho.m*M.volume*C.pm + (M.Temp[,288] - f.point)*rho.m*M.volume*C.pm.fusion)/10^6))
 
 
 if (submodels == 1) {
@@ -32,9 +33,9 @@ if (submodels == 1) {
     delta.z.new <- delta.z*(1 + depth.factor)
     M.volume.new <- delta.z.new*Au
     Enthalpy.c.new <- Enthalpy.c + 
-         (M.volume.new - M.volume)*rho.m*((In.M.temp*C.pm) + 272.15*C.pm + C.pm.fusion)/10^6
-    Enthalpy.c.new[1] <- Enthalpy.c.new[1:2] + 
-                        ((precip.d*Au)*rho.m*T.air.K[288]*C.pm/10^6/2)
+         (M.volume.new - M.volume)*rho.m*((In.M.temp + f.point)*C.pm + C.pm.fusion)/10^6
+    Enthalpy.c.new[1] <- Enthalpy.c.new[1] + 
+                         (precip.d*Au)*rho.m*mean(T.air.K)*C.pm/10^6
     Enthalpy.V <- Enthalpy.c.new/M.volume.new  #Enthalpy/V, O209:O238
   } else { 
    if (i %% mixing.day == 0) {
@@ -49,13 +50,14 @@ if (submodels == 1) {
   depthchange.d <- precip.d - Evap.depth.d      #without manure input
   }     
   #Enthalpy after manure added, N209:N238
-  depth.factor <- depthchange.d/M.depth
-  delta.z.new <- delta.z*(1 + depth.factor)
-  M.volume.new <- delta.z.new*Au
-  Enthalpy.c.new <- Enthalpy.c + 
-                   (M.volume.new - M.volume)*rho.m *
-                  ((In.M.temp*C.pm) + 272.15*C.pm + C.pm.fusion)/1000000
-  Enthalpy.V <- Enthalpy.c.new/M.volume.new  #Enthalpy/V, O209:O238
+   depth.factor <- (depthchange.d - precip.d)/M.depth  #subtract precip.d becuase I use it to adjust manure depth
+   delta.z.new <- delta.z*(1 + depth.factor)
+   M.volume.new <- delta.z.new*Au
+   Enthalpy.c.new <- Enthalpy.c + 
+      (M.volume.new - M.volume)*rho.m*((In.M.temp + f.point)*C.pm + C.pm.fusion)/10^6
+   Enthalpy.c.new[1] <- Enthalpy.c.new[1] + 
+      (precip.d*Au)*rho.m*(mean(T.air.K)*C.pm + C.pm.fusion)/10^6
+   Enthalpy.V <- Enthalpy.c.new/M.volume.new  #Enthalpy/V, O209:O238
   }
 } else {
 #In.M.temp<-annualT #incoming manure temperature
@@ -66,7 +68,7 @@ delta.z.new <- delta.z*(1 + depth.factor)                 #L209:238
 M.volume.new <- delta.z.new*Au                          #new manure volume,M209:M238
 #Enthalpy after manure added, N209:N238
 Enthalpy.c.new <- Enthalpy.c + (M.volume.new - M.volume) *
-                 rho.m*((In.M.temp*C.pm) + 272.15*C.pm + C.pm.fusion)/1000000
+                 rho.m*((In.M.temp*C.pm) + f.point*C.pm + C.pm.fusion)/1000000
 Enthalpy.V <- Enthalpy.c.new/M.volume.new  #Enthalpy/V, O209:O238
 }
 
@@ -74,15 +76,16 @@ Enthalpy.V <- Enthalpy.c.new/M.volume.new  #Enthalpy/V, O209:O238
 #Final temp after depth adjustment,
 #This is the new initial manure temp for the next day
 #not the manure temp at the end of the day!
-Final.M.Temp <- ifelse(Enthalpy.V < E.272, 272.15*Enthalpy.V/E.272,
+Final.M.Temp <- ifelse(Enthalpy.V < E.272, f.point*Enthalpy.V/E.272,
                      ifelse(Enthalpy.V >= E.273, 
-                            273.15 + (Enthalpy.V - E.273)*10^6/(C.pm*rho.m),
-                            272.15 + (Enthalpy.V - E.272)/fusion))
+                            t.point + (Enthalpy.V - E.273)*10^6/(C.pm*rho.m),
+                            f.point + (Enthalpy.V - E.272)/fusion))
 
 #simulated possible convective heat transfer
-
-
-if (submodels == 1) {
+# Final.M.Temp.t <- Final.M.Temp-273.15
+# Final.M.Temp.1 <- Final.M.Temp[]
+# 
+if (submodels == 1 & i %% mixing.day == 0) {
   if (M.depth <= 1.5) {
     Final.M.Temp[mix.pattern1] <- mean(Final.M.Temp[mix.pattern1])
   } else {
