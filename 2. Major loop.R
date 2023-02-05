@@ -42,7 +42,7 @@ for (i in 1:d.length) {
                       M.temp.depth,In.M.temp)
   print(paste("Sequence",i,"And Manure temp",Avg.M.temp.d))
 
-  source("5.2. Manure volume removal.R",echo = F)
+  source("5.1. Manure volume removal.R",echo = F)
   
   #Save the new temperatures
   ini.M.Temp <- Final.M.Temp

@@ -69,7 +69,6 @@ T.air.K <- T.air+273.15
 #WVPD,F111:KG111
 WVPD <- Teten.H2Oa*exp((Teten.H2Ob*T.air)/(Teten.H2Oc+T.air))*(1-Rh/100)
 
-
 #Evaporation per second (kg/s), F112:KG112
 E <- rho.w*(WVPD)*wind.f/(24*3600*1000)*Au
 Evap.depth.d <- sum(E*T.delta)/rho.w/Au #Incorporate daily evaporation, depth together

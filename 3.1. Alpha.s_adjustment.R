@@ -1,27 +1,15 @@
 #This's part to adjust alpha.s 
 #I assumed that the snow would only presence on a day of precepitation, i.e no accumulation 
 #The snow is form when the temperature is below 0
-Tmean <- (AirTmax1 + AirTmin1)/2
-snow <- c() # cm
-if (Tmean <= 0 | AirTmax1 <= 1) {
-  snow     <- precip.d*100*10 #precipt.d is m, turn to cm and *10 to snow  
-  albedo   <- (0.9280*snow/(0.3152 + snow)) #Perovich et al. 2007
-  max(0.55,albedo) # the minimum is 0.55 follow we did in the DNDC
-  alpha.s  <- 1 - albedo
-  epsilon  <- 0.98
+if (snow[i] > 0) {
+  albedo <- (0.9280*snow[i]/(0.3152 + snow[i])) #Perovich et al. 2007
+  albedo <- max(0.55,albedo) # the minimum is 0.55 follow we did in the DNDC
+  alpha.s <- 1 - albedo
+  epsilon  <- 0.98 #assume surface is frozen when snow presence
 } else {
-  snow <- 0
   alpha.s <- parameters[1,20]
   epsilon <- parameters[1,24]
   }
-
-#The number 1 degree for AirTamx1 from Jennings et al., 2018 
-#https://doi.org/10.1038/s41467-018-03629-7
-
-#Snow melting
-
-
-
 
 #Obtain a model for albedo based on Perovich et al. 2007,
 #Light reflection and transmission by a temperate snow cover
