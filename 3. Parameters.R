@@ -23,24 +23,8 @@ d.length <- nrow(Envir.daily)
 ini.M.Temp <- read.csv("input/Initial M temp.csv",header = T)[,1]#change to vector
 
 if (submodels == 1) {
-#obtain snow accumulation
-snow.f <- ifelse((Envir.daily$AirTmax1 + Envir.daily$AirTmin1)/2 <= 0 | 
-               Envir.daily$AirTmax1 <= 1, Envir.daily$precip,0)
-#The number 1 degree for AirTamx1 from Jennings et al., 2018 
-#https://doi.org/10.1038/s41467-018-03629-7
-
-melt <- (Envir.daily$AirTmax1 + 12) * 0.052#Daily melting rate, cm degreeC-1, d-1
-melt <- melt[c(d.length,1:(d.length - 1))]
-snow <- 0 
-
-for (i in 2:d.length) {
-  if (snow.f[i] > 0 | snow[i-1] > 0) {
-    snow[i] <- snow.f[i] + snow[i-1] - melt[i] 
-    } else {
-    snow[i] <- 0
-  }
-}
-snow <- ifelse(snow <= 0, 0, snow)
+#obtain snow accumulation, cm
+source("3.1. snow depth.R", echo = FALSE)
 }
 
 #It includes (1) shadow effect, (2) latent heat and snow accumulation, (3) agitation

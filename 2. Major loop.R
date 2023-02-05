@@ -15,7 +15,7 @@ for (i in 1:d.length) {
   cc <- min(Envir.daily$cloud[i],1) #cloud clover
   precip.d <- Envir.daily$precip[i]/1000
   if (submodels == 1) {
-    source("3.1. Alpha.s_adjustment.R",echo = F)
+    source("3.2. Alpha.s_adjustment.R",echo = F)
   } else {
     snow <- 0
   }

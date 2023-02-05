@@ -1,7 +1,7 @@
 library(REdaS); library(xlsx); library(beepr) ;library(dplyr); library(imputeTS)
 #Set location, initial date and end time; date origin in R, 1970-1-1
 
-test <- 39  #the test number
+test <- 40  #the test number
 Location <- "VA"#VA or OR
 for (test in 29:30) {
 for (submodels in 0:1) {#1 with revised submodel, 0 is without
