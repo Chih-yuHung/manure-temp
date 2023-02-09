@@ -40,14 +40,14 @@ if (Location == "OR") {
 
 #For measured manure temperature
 plotoutput <- function() {
-par(mfrow = c(3,1), mar = c(4,8,1,7),oma = c(3,0,0,0))
+par(mfrow = c(3,1), mar = c(4,8.5,1,7),oma = c(3,0,0,0))
 #A. Temperature
 plot(temp,type = "l",xaxt = 'n',col = "grey",ylim = c(-15,30)
      ,xlab = "",ylab = "",las = 1,cex.axis = 2) #Air temperature
 lines(obs$temp.avg,type = "l",lwd = 2) #manure avg. obs temperature
-lines(sim.og$Temperature.C[1:nrow(obs)],type = "l",col = "blue",lwd = 2) #without shade calibration
-lines(sim.re$Temperature.C[1:nrow(obs)],col = "red",lwd = 2)
-lines(sim.re$In.M.temp[1:nrow(obs)],col = "red",lwd = 2,lty = 3)
+lines(sim.og$Temperature.C[1:length(temp)],type = "l",col = "blue",lwd = 2) #without shade calibration
+lines(sim.re$Temperature.C[1:length(temp)],col = "red",lwd = 2)
+lines(sim.re$In.M.temp[1:length(temp)],col = "red",lwd = 2,lty = 3)
 #lines(obs$temp0.5,type = "l",lwd = 2, lty = 3) #manure avg. obs temperature
 #lines(sim.og$temp.05,type = "l",col = "blue",lwd = 2, lty = 3) #without shade calibration
 #lines(sim.re$temp.05,col = "red",lwd = 2, lty = 3)
@@ -92,7 +92,7 @@ mtext("Snow water equivalent (cm)",
       side = 4,line = 5.5, cex = 2)
 legend(5,3500,
        c("cumulative solar irradiation","cumulative solar irradiation (revised model)",
-         "precipitation","snow water equivalent"),
+         "precipitation","snow cover (water equivalent)"),
        col = c("blue","red","black","red"),
        lty = c(2,2,1,1),lwd = 2,bty = "n",
        cex = 2.5)

@@ -20,31 +20,31 @@ obs$DOY[which(leap_year(obs$Year))] <- obs$DOY[which(leap_year(obs$Year))]-1
 obs[,9] <- obs$Depth*100
 colnames(obs)[9] <- "Depth.cm"
 
-Spring.obs <- obs[122 <= obs$DOY & obs$DOY <= 171,]
+Spring.obs <- obs[80 <= obs$DOY & obs$DOY <= 171,]
 Summer.obs <- obs[172 <= obs$DOY & obs$DOY <= 265,]
 Fall.obs   <- obs[266 <= obs$DOY & obs$DOY <= 355,]
 Winter.obs <- rbind(obs[356 <= obs$DOY,],
-                          obs[obs$DOY <= 121,])
+                          obs[obs$DOY <= 79,])
 obs.y      <- list(obs[1:obs.n,], 
                          Spring.obs, Summer.obs
                          ,Fall.obs, Winter.obs)
-length(na.omit(obs$temp.avg))
+
 #The simulation results from original model 
-Spring.sim.og <- sim.og[122 <= sim.og$DOY & sim.og$DOY <= 171,]
+Spring.sim.og <- sim.og[80 <= sim.og$DOY & sim.og$DOY <= 171,]
 Summer.sim.og <- sim.og[172 <= sim.og$DOY & sim.og$DOY <= 265,]
 Fall.sim.og   <- sim.og[266 <= sim.og$DOY & sim.og$DOY <= 355,]
 Winter.sim.og <- rbind(sim.og[356 <= sim.og$DOY,],
-                      sim.og[sim.og$DOY <= 121,])
+                      sim.og[sim.og$DOY <= 79,])
 sim.og.y <- list(sim.og[1:obs.n,],
                        Spring.sim.og, Summer.sim.og
                        ,Fall.sim.og, Winter.sim.og)
 
 #The simulation results with revised model
-Spring.sim <- sim.re[122 <= sim.re$DOY & sim.re$DOY <= 171,]
+Spring.sim <- sim.re[80 <= sim.re$DOY & sim.re$DOY <= 171,]
 Summer.sim <- sim.re[172 <= sim.re$DOY & sim.re$DOY <= 265,]
 Fall.sim   <- sim.re[266 <= sim.re$DOY & sim.re$DOY <= 355,]
 Winter.sim <- rbind(sim.re[356 <= sim.re$DOY,],
-                      sim.re[sim.re$DOY <= 121,])
+                      sim.re[sim.re$DOY <= 79,])
 sim.re.y <- list(sim.re[1:obs.n,], 
                     Spring.sim, Summer.sim
                     ,Fall.sim, Winter.sim)

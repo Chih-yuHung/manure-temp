@@ -16,6 +16,7 @@ for (i in 1:d.length) {
   precip.d <- Envir.daily$precip[i]/1000
   if (submodels == 1) {
     source("3.2. Alpha.s_adjustment.R",echo = F)
+    snow <- snow.p[i]
   } else {
     snow <- 0
   }
@@ -27,8 +28,9 @@ for (i in 1:d.length) {
   #print(paste("after volume",Sys.time()-starttime))
   #To calculate solar radiation, soil temp, and manure temp at 300 sec steps.
   source("6. Solar radiation and soil temp_shade.R",echo = F)
-  #To calculate enthalpy.
+    #To calculate enthalpy.
   source("6.1 Enthalpy calculation.R",echo = F)
+  cat(paste("surface temp =",M.Temp[1:3,288] - 273, sep = ""))
   #print(paste("after solar",Sys.time()-starttime))
   #To calculate final hourly temp
   source("7. hourly temp.R",echo = F)

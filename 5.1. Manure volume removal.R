@@ -9,6 +9,7 @@ for (removal.cycle in 1:length(removal.depth)) {
   cat(paste("manure removal date =",i))
   M.depth <- M.depth - removal.depth.d + depthchange.d
   Zmmax <- M.depth
+  Final.M.Temp[1:30] <- mean(Final.M.Temp) # assumed manure was well-mixed after removal
   break
   } 
 }

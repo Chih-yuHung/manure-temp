@@ -1,8 +1,8 @@
 #This's part to adjust alpha.s 
 #I assumed that the snow would only presence on a day of precepitation, i.e no accumulation 
 #The snow is form when the temperature is below 0
-if (snow[i] > 0) {
-  albedo <- (0.9280*snow[i]/(0.3152 + snow[i])) #Perovich et al. 2007
+if (snow.p[i] > 0) {
+  albedo <- (0.9280*snow.p[i]/(0.3152 + snow.p[i])) #Perovich et al. 2007
   albedo <- max(0.55,albedo) # the minimum is 0.55 follow we did in the DNDC
   alpha.s <- 1 - albedo
   epsilon  <- 0.98 #assume surface is frozen when snow presence
