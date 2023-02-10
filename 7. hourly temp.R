@@ -17,5 +17,5 @@ VT.h <- M.Temp.h*M.volume
 
 Avg.VT.h <- M.Temp.d*M.volume                      #BE244:273
 Avg.M.Temp.h <- colSums(VT.h)/M.volume.current     #average hourly M temp,F275:AC275
-Avg.M.Temp.d <- sum(Avg.VT.h)/M.volume.current     #average daily M temp(k), AD275 = F277 
-Avg.M.temp.d <- Avg.M.Temp.d - 273.15                #average daily M temp(c), AE275 = F278 = daily temp into output
+Avg.M.Temp.d <- mean(Final.M.Temp)                 #average daily M temp(k), 
+Avg.M.temp.d <- Avg.M.Temp.d - 273.15              #average daily M temp(c), AE275 = F278 = daily temp into output

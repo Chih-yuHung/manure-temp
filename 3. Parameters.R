@@ -29,20 +29,7 @@ source("3.1. snow depth.R", echo = FALSE)
 
 #It includes (1) shadow effect, (2) latent heat and snow accumulation, (3) agitation
 mixing.day <- as.integer(parameters[1,7])
-mix.place <- parameters[2,7] #determine the mixing place
-if (mix.place == "top") {
-  mix.pattern1 <- c(1:10) # depth < 1.5 m
-  mix.pattern2 <- c(1:5)  # depth >= 1.5 m
-} else if (mix.place == "middle") {
-  mix.pattern1 <- c(11:20)
-  mix.pattern2 <- c(13:17)
-} else if (mix.place == "bottom") {
-  mix.pattern1 <- c(21:30)
-  mix.pattern2 <- c(26:30)
-} else if (mix.place == "all") {
-  mix.pattern1 <- c(1:30)
-  mix.pattern2 <- c(1:30)
-}
+mix.place <- parameters[2,7] #it's the height from the bottom (m)
 
 #Tank properties
 Htank <- parameters[1,8]       #height of tank, m, B29
