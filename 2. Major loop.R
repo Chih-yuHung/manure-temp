@@ -13,7 +13,8 @@ for (i in 1:d.length) {
   wind.v <- Envir.daily$wind[i]   #daily wind speed at 2m, m/h
   wind.f <- (2.36 + 1.67*wind.v)*Au^(-0.05)
   cc <- min(Envir.daily$cloud[i],1) #cloud clover
-  precip.d <- Envir.daily$precip[i]/1000
+  precip.d <- ifelse(submodels == 1, 
+                     (rain[i] + melt.act[i])/100, Envir.daily$precip[i]/1000)
   if (submodels == 1) {
     source("3.2. Alpha.s_adjustment.R",echo = F)
     snow <- snow.p[i]
@@ -30,7 +31,7 @@ for (i in 1:d.length) {
   source("6. Solar radiation and soil temp_shade.R",echo = F)
     #To calculate enthalpy.
   source("6.1 Enthalpy calculation.R",echo = F)
-  cat(paste("surface temp =",M.Temp[1:3,288] - 273, sep = ""))
+  cat(paste("snow depth =",snow, sep = ""))
   #print(paste("after solar",Sys.time()-starttime))
   #To calculate final hourly temp
   source("7. hourly temp.R",echo = F)
@@ -39,9 +40,9 @@ for (i in 1:d.length) {
   
 
   #Write the results
-  Output[i,6:16] <- c(Avg.M.temp.d,M.depth*100,M.volume.current,
+  Output[i,6:17] <- c(Avg.M.temp.d,M.depth*100,M.volume.current,
                       Evap.depth.d*100,precip.d*100,sum(q.net.rad),snow,
-                      M.temp.depth,In.M.temp)
+                      M.temp.depth,In.M.temp,alpha.s)
   print(paste("Sequence",i,"And Manure temp",Avg.M.temp.d))
 
   source("5.1. Manure volume removal.R",echo = F)

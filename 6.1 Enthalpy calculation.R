@@ -10,6 +10,9 @@ Enthalpy.c <- ifelse(M.Temp[,288] < f.point,M.Temp[,288]*rho.m*M.volume*C.pm/10^
 if (submodels == 1) {
   #incoming manure temp.
   In.M.temp <- Avg.Barn.temp + Barn.temp.amp*sin(2*pi/365*T.day + Temp.cost) # Incoming manure temp
+  #which.min(abs(0.5 - seq(M.depth,0,length.out = 30)))
+  #In.M.temp <- M.Temp[which.min(abs(0.5 - seq(M.depth,0,length.out = 30))),288]-273.15
+  
   #daily depth change
   depthchange.d <- if (i %% mixing.day == 0) {
     sum(M.daily[(i - mixing.day + 1):i]) + precip.d - Evap.depth.d
@@ -25,7 +28,7 @@ if (submodels == 1) {
     rho.m * ((In.M.temp + f.point) * C.pm + C.pm.fusion) / 10^6
   
   #determine enthalpy after precipitation
-  if (snow > 0) {
+  if (melt.act[i] > 0) {
     Enthalpy.c.new[1:3] <- Enthalpy.c.new[1:3] + (precip.d * Au) * rho.m * mean(T.air.K) * C.pm / 10^6 / 3
   } else {
     Enthalpy.c.new[1:3] <- Enthalpy.c.new[1:3] + (precip.d * Au) * rho.m * (mean(T.air.K) * C.pm + C.pm.fusion) / 10^6 / 3
@@ -36,7 +39,8 @@ if (submodels == 1) {
   
 } else {
   #Situation in submodel = 0
-  In.M.temp <- Avg.Barn.temp + Barn.temp.amp*sin(2*pi/365*T.day + Temp.cost) #Incoming manure temp, L49,L39
+  In.M.temp <- 15.6 #Avg.Barn.temp + Barn.temp.amp*sin(2*pi/365*T.day + Temp.cost) 
+   #15.6 is an optimal temperature for growing pigs. 
   depthchange.d <- M.daily[i] + precip.d - Evap.depth.d #L34
   depth.factor <- depthchange.d/M.depth                   #N204
   delta.z.new <- delta.z*(1 + depth.factor)                 #L209:238
@@ -59,7 +63,7 @@ Final.M.Temp <- ifelse(Enthalpy.V < E.272, f.point*Enthalpy.V/E.272,
 if (submodels == 1 & i %% mixing.day == 0) {
   mix.range <- floor(min(30,round(30*(100/sum(M.volume.new)),0))/2) #the cells to be mixed
   outlet.cell <- which.min(abs(mix.place - seq(M.depth,0,length.out = 30))) #outlet place
-  mix.cells <- c((outlet.cell-mix.cells):(outlet.cell+mix.cells))
+  mix.cells <- c((outlet.cell - mix.range):(outlet.cell + mix.range))
   mix.cells <- unique(pmin(pmax(mix.cells,1),30))
   Final.M.Temp[mix.cells] <- mean(Final.M.Temp[mix.cells])  
   }

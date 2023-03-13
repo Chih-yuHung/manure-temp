@@ -1,7 +1,7 @@
 #This file calculate heat transfer and it iterate everyday
 
 #Environmental input
-ReL <- wind*ri/Vair*1.3                                  #Reynold's number, unitless,F42
+ReL <- wind*ri/Vair*1.3                               #Reynold's number, unitless,F42
 Nu <- ifelse(ReL<5*10^5,0.453*(ReL^(0.5))*(Pr^(1/3))  #Nusselt Number,F43
            ,(0.037*(ReL^(4/5))-871)*(Pr^(1/3)))    
 hcv.ms <- (Nu*ka)/ri                                  #Heat transfer coefficient,F44       
@@ -28,8 +28,8 @@ m  <- ifelse(sin.alpha>0,Pa/(101325*sin.alpha),0)       # Optical air mass numbe
 Sb <- ifelse(sin.alpha>0, Eb*(tau^m)*sin.alpha,0)      # solar bean radiation (Wh/m2),F104-KG104
 Sd <- ifelse(sin.alpha>0,0.3*(1-tau^m)*Eb*sin.alpha,0) # Diffusive radiation (wh/m2),F105-KG105
 Sr.total <- sum(Sb,Sd)                                 # F322, Total solar radiation
-q.net.rad <- alpha.s*((Sb+Sd)/Sr.total)*((SR*1000*1000)/T.delta) #Net solar radiation, F106:KG106
-q.net.rad <- q.net.rad*light.d                         #apply shade coefficient  
+q.net.rad <- alpha.s*light.d*((Sb+Sd)/Sr.total)*((SR*1000*1000)/T.delta) #Net solar radiation, F106:KG106
+              #apply shade coefficient  
 } else {
 m <- ifelse(sin.alpha>0,Pa/(101325*sin.alpha),0)       # Optical air mass number, #F103-KG103
 Sb <- ifelse(sin.alpha>0, Eb*(tau^m)*sin.alpha,0)      # solar bean radiation (Wh/m2),F104-KG104
@@ -77,8 +77,9 @@ if (snow > 0) {
 #emperical model,Meira Neto, A.A et al., 2020  exponential equation in Fig 1 c. 
 #https://doi.org/10.1038/s43247-020-00056-9
 }
-e.ac <- 1.72*(((Teten.H2Oa*exp((Teten.H2Ob*(T.air))/(Teten.H2Oc+(T.air)))*(Rh/100))/T.air.K)^(1/7))
 
+#emissivity of atmosphere
+e.ac <- 1.72*(((Teten.H2Oa*exp((Teten.H2Ob*(T.air))/(Teten.H2Oc+(T.air)))*(Rh/100))/T.air.K)^(1/7))
 #cloud-corrected air emissivity, F117:KG117 
 e.a <- (1-0.84*cc)*e.ac+0.84*cc
 

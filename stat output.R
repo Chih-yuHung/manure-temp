@@ -49,6 +49,16 @@ sim.re.y <- list(sim.re[1:obs.n,],
                     Spring.sim, Summer.sim
                     ,Fall.sim, Winter.sim)
 
+#Descriptive stat data
+summary(obs$temp0.5) #VA:-0.8 to 20.3, OR:-0.4 to 21.4
+summary(obs$temp2.5) #VA:2.5 to 16.5, OR: 0.6 to 19.7
+summary(obs$temp.avg) #VA: 8.6, OR: 10.9
+mean(Summer.obs$temp.avg) #VA:15.4  ,OR:17.2
+Summer.air <- Envir.daily[172 <= Envir.daily$DOY & Envir.daily$DOY <= 265,]
+mean((Summer.air$AirTmax1+Summer.air$AirTmin1)/2) #VA:15.0   OR:14.5
+
+
+
 #A table for RMSE, d, R2, bias
 stat.avg <- data.frame(Depth = c("sample size",rep(c("Avg.","0.5 m","1.5 m", "2.5 m"),each = 4)),
                       stat.name = c("",rep(c("RMSE","D","R2","Bias"), 4)),
@@ -206,7 +216,7 @@ write.xlsx(sim.re,
                           test,".xlsx",sep = ""),
              sheetName = "Output.re", row.names = F, append = TRUE)
 
-  write.xlsx(stat.avg,
+write.xlsx(stat.avg,
            file = paste(result,Location,"/stat/",Location,"_",
                         test,".xlsx",sep = ""),
                sheetName = "overall stat", row.names = F, append = TRUE)
