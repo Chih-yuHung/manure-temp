@@ -6,9 +6,13 @@ if (snow.p[i] > 0) {
   albedo <- max(0.55,albedo) # the minimum is 0.55 follow we did in the DNDC
   alpha.s <- 1 - albedo
   epsilon  <- 0.98 #assume surface is frozen when snow presence
+  Teten.H2Ob <- Teten.Iceb
+  Teten.H2Oc <- Teten.Icec
 } else {
   alpha.s <- parameters[1,20]
   epsilon <- parameters[1,24]
+  Teten.H2Ob <- parameters[2,29]
+  Teten.H2Oc <- parameters[3,29]
   }
 
 #Obtain a model for albedo based on Perovich et al. 2007,

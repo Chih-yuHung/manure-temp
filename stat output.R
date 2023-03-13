@@ -202,9 +202,11 @@ Output.tank[19,2] <- sum(Output$`snow depth`)       #Maximum Manure Depth
 #write the results out
 library(xlsx)
 manure.pic <- paste(result,Location,"/figures/png/",Location,"_",test,".png",sep = "")
+depth.pic <- paste(result,Location,"/figures/png/",Location,"_",test,"_depth.png",sep = "")
 wb <- createWorkbook()
 sheet <- createSheet(wb, "pic")
 addPicture(manure.pic, sheet, startRow = 1, startColumn = 1)
+addPicture(depth.pic, sheet, startRow = 1, startColumn = 20)
 saveWorkbook(wb, file = paste(result,Location,"/stat/",Location,"_",
 test,".xlsx",sep = ""), password = NULL)
 write.xlsx(sim.og,

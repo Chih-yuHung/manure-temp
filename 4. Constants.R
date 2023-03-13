@@ -50,8 +50,7 @@ Vair <- 14.2*10^-6                            # air kinematic viscosity, m2 s-1,
 Pr <- 0.714                                   # Air Prandtl Number, unitless, B12
                                               # Evaporation rate calculation, Campbell&Norman, 1998.
 
-Teten.Iceb <- 21.87                           # unitless, G12
-Teten.Icec <- 265.5                           # degree C, G13
+
 rho.w <- 1000                                 # water density. kg/m3, G14
 Lambda <- 2.45*10^6                           # latent heat of vaporization, J kg-1, G15  
 

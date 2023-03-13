@@ -17,11 +17,13 @@ sim.og <- read.csv(paste(result,Location,"/original/",
                                 Location,"_",test,".csv",sep = ""),header = T) 
 SR.og <- sim.og$total.radiation/12/277.77778
 SR.og.cum <- cumsum(SR.og)
+Eva.og.cum <- cumsum(sim.og$Evaporation.cm)
 #simulated data after calibration and modification
 sim.re <- read.csv(paste(result,Location,"/with shade/",
                              Location,"_",test,".csv",sep = ""),header = T)
 SR <- sim.re$total.radiation/12/277.77778
 SR.cum <- cumsum(SR)
+Eva.cum <- cumsum(sim.re$Evaporation.cm)
 sim.re$snow.depth[sim.re$snow.depth == 0] <- NA 
 #obtain removal days
 removal.a <- removal.start[1:4] - as.numeric(as.Date(start.date)) + 1
@@ -159,31 +161,37 @@ plot(sim.re$snow.depth/10,
      lty = "dashed",xaxt = "n",
      yaxt = "n",xlab = "" , 
      ylab = "", lwd = 2,
-     ylim = c(0,4),yaxs = "i")
-lines(sim.re$Precipitation.cm+1,lwd = 2,col = cols[2])
-lines(sim.og$Evaporation.cm,
+     ylim = c(0,5),yaxs = "i")
+lines(sim.re$Precipitation.cm,
+      lwd = 2,col = cols[1])
+lines(Eva.og.cum/16,
       lwd = 2, col = cols[4],
       lty = 2)
-lines(sim.re$Evaporation.cm,
+lines(Eva.cum/16,
       lwd = 2, col = cols[4])
-
 axis(side = 1, at = plot.day,
      cex.axis = 2,lwd.ticks = 2,tck = -0.03,mgp = c(0,2,0),
      labels = plot.date, font = 2)
-axis(side = 2, at = c(0,1,2,3,4),
-     labels = c("0","10","20","30","40"),
+axis(side = 2, at = c(0,1,2,3,4,5),
+     labels = c("0","10","20","30","40","50"),
      las = 2, cex.axis = 2, font = 2)
 axis(side = 4, at = c(0,1,2,3,4)
-     ,labels = c("0","10","20","30","40"),
+     ,labels = c("0","20","40","60","80"),
      las = 2, cex.axis = 2, font = 2)
-mtext("Precipitation/ evaporation (cm)",
+mtext("Precipitation/ snow cover (cm)",
       side = 2,line = 5, cex = 2)
-mtext("Snow cover (cm)",
+mtext("Evaporation (cm)",
       side = 4,line = 3.5, cex = 2)
+legend(5,4.5,
+       c("cumulative evaporation","cumulative evaporation (revised model)",
+         "Precipitation","Snow cover"),
+       col = cols[c(4,4,1,1)],
+       lty = c(2,1,1,2),lwd = 2,bty = "n",
+       cex = 2.5)
+}
 
-
-
-#C. Manure depth
+plot.depth <- function() {
+#Manure depth
 plot(sim.re$Depth.cm,type = "l",
      ylim = c(0,350),xaxt = 'n',
      col = "black",xlab = "",
@@ -194,7 +202,7 @@ depth.m <- read.csv(paste(result,Location,"/",Location,".depth.csv",sep = ""),he
 points(depth.m[,1],
        depth.m[,2],cex = 3,lwd = 3)
 for (i in 1:4) {#removal dates
-  arrows(removal.a[i],20,removal.a[i],50) 
+  arrows(removal.a[i],20,removal.a[i],50)
 }
 axis(side = 1, at = plot.day,
      cex.axis = 2,lwd.ticks = 2,tck = -0.03,mgp = c(0,2,0),
@@ -227,3 +235,15 @@ emf(file = paste(result,Location,"/figures/",Location,"_",test,".emf",sep = "")
     ,width = 12, height = 18,emfPlus = FALSE, family = "Calibri")
 plotoutput()
 dev.off()
+
+#Simulated depth data
+png(file = paste(result,Location,"/figures/png/",Location,"_",test,"_depth.png",sep = "")
+    ,width = 1200, height = 600)
+plot.depth()
+dev.off()
+
+emf(file = paste(result,Location,"/figures/",Location,"_",test,"_depth.emf",sep = "")
+    ,width = 12, height = 6,emfPlus = FALSE, family = "Calibri")
+plot.depth()
+dev.off()
+
