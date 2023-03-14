@@ -102,21 +102,16 @@ lines(sim.og$Temperature.C[1:length(temp)],
 lines(sim.re$Temperature.C[1:length(temp)],
       col = cols[2],
       lwd = 3)                #with shade calibration
-legend(5,-5,c("Tair","Tm meausrement","Tm model","Tm revised model"),
+legend(115,30,c("Tair","Tm meausrement","Tm model","Tm revised model"),
        col = c("grey",cols[c(1,2,2)]),
        lty = c(2,1,3,1),lwd = 3,ncol = 2,
        bty = "n",cex = 2.5,
-       title = "Average temperature", title.adj = 0)
-#legend(180,30,c("Tm measurement","Tm model","Tm revised model"),
-#       col = c("black","blue","red"),
-#       lty = 3,lwd = 2,ncol = 1,
-#       bty = "n",cex = 2.5, 
-#       title = "Temperature at 0.5 m depth ")
+       title = "Average temperature", title.adj = 0.5)
 axis(side = 1, at = plot.day,
      cex.axis = 2,lwd.ticks = 2,tck = -0.03,mgp = c(0,2,0),
      labels = plot.date, font = 2)
 for (i in 1:length(removal.a)) {#removal dates
-arrows(removal.a[i],-5,removal.a[i],-1) 
+arrows(removal.a[i],-15,removal.a[i],-10) 
 }
 mtext(expression(paste("Temperature (",degree,"C)",sep = "")),side = 2,line = 3, cex = 2)
 text(5,28, paste(Location," tank",sep = ""), cex = 2.5,pos = 4)
@@ -148,12 +143,13 @@ mtext(expression(paste("Solar irradiation (MJ/ ",m^2,")",sep = "")),
                  side = 2,line = 5, cex = 2)
 mtext("Albedo (%)",
       side = 4,line = 3.5, cex = 2)
-legend(5,3500,
-       c("cumulative solar irradiation","cumulative solar irradiation (revised model)",
-         "Surface albedo","Surface albedo (revised model)"),
+legend(1,3250,
+       c("Cumulative solar irradiation","Cumulative solar irradiation (revised)",
+         "Surface albedo","Surface albedo (revised)"),
        col = cols[c(1,1,3,3)],
        lty = c(2,1,2,1),lwd = 2,bty = "n",
        cex = 2.5)
+text(5,3300, paste(Location," tank",sep = ""), cex = 2.5,pos = 4)
 
 #C. Evaporation, snow cover, precipitation 
 plot(sim.re$snow.depth/10,
@@ -164,10 +160,10 @@ plot(sim.re$snow.depth/10,
      ylim = c(0,5),yaxs = "i")
 lines(sim.re$Precipitation.cm,
       lwd = 2,col = cols[1])
-lines(Eva.og.cum/16,
+lines(Eva.og.cum/20,
       lwd = 2, col = cols[4],
       lty = 2)
-lines(Eva.cum/16,
+lines(Eva.cum/20,
       lwd = 2, col = cols[4])
 axis(side = 1, at = plot.day,
      cex.axis = 2,lwd.ticks = 2,tck = -0.03,mgp = c(0,2,0),
@@ -175,19 +171,21 @@ axis(side = 1, at = plot.day,
 axis(side = 2, at = c(0,1,2,3,4,5),
      labels = c("0","10","20","30","40","50"),
      las = 2, cex.axis = 2, font = 2)
-axis(side = 4, at = c(0,1,2,3,4)
-     ,labels = c("0","20","40","60","80"),
+axis(side = 4, at = c(0,1,2,3,4,5)
+     ,labels = c("0","20","40","60","80","100"),
      las = 2, cex.axis = 2, font = 2)
 mtext("Precipitation/ snow cover (cm)",
       side = 2,line = 5, cex = 2)
 mtext("Evaporation (cm)",
-      side = 4,line = 3.5, cex = 2)
+      side = 4,line = 4, cex = 2)
 legend(5,4.5,
-       c("cumulative evaporation","cumulative evaporation (revised model)",
+       c("Cumulative evaporation","Cumulative evaporation (revised model)",
          "Precipitation","Snow cover"),
        col = cols[c(4,4,1,1)],
        lty = c(2,1,1,2),lwd = 2,bty = "n",
        cex = 2.5)
+text(5,4.7, paste(Location," tank",sep = ""), cex = 2.5,pos = 4)
+
 }
 
 plot.depth <- function() {
@@ -202,7 +200,7 @@ depth.m <- read.csv(paste(result,Location,"/",Location,".depth.csv",sep = ""),he
 points(depth.m[,1],
        depth.m[,2],cex = 3,lwd = 3)
 for (i in 1:4) {#removal dates
-  arrows(removal.a[i],20,removal.a[i],50)
+  arrows(removal.a[i],10,removal.a[i],40)
 }
 axis(side = 1, at = plot.day,
      cex.axis = 2,lwd.ticks = 2,tck = -0.03,mgp = c(0,2,0),
@@ -210,8 +208,7 @@ axis(side = 1, at = plot.day,
 mtext("Date",line = 1 , cex = 2.5,side = 1,
       outer = T)
 mtext("Depth (cm)",side = 2,cex = 2,line = 5)
-#abline(h = 0.5*Htank*100)
-#abline(v = c(49,144,235,326))
+text(5,320, paste(Location," tank",sep = ""), cex = 2.5,pos = 4)
 }
 
 #Measurement data
