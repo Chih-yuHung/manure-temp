@@ -174,13 +174,17 @@ for (i in 1:4) {
 
 # Summary for the results, part 2. Only output after all simulation is done. 
 #The data of manure tank, i.e output L1:M18
-Output.tank <- data.frame(matrix(ncol = 2,nrow = 19))
-Output.tank[1:19,1] <- c("Location","SurfaceArea(m2)","Starting.Depth(m)"
+Output.tank <- data.frame(matrix(ncol = 2,nrow = 29))
+Output.tank[1:29,1] <- c("Location","SurfaceArea(m2)","Starting.Depth(m)"
                          ,"Starting.Volume.m3","Total.Solids(%)",""
                          ,"Tank.Storage","Total.Tank.Volume(m3)"
                          ,"Yearly Maximum Storage Volume.m3","Yearly.Rain.Volume.m3"
                          ,"Yearly.Manure.Storage.Volume.m3","Tank.Diameter.m",""
-                         ,"Average.Tm.C","Max.Tm.C","Min.Tm.C","","Max.d.cm","annual snow.cm")
+                         ,"Average.Tm.C","Max.Tm.C","Min.Tm.C","","Max.d.cm","annual snow.cm"
+                         ,"Summer.Tm.C","Summer.Tm.re.C","Summer.Tm.me.C"
+                         ,"Winter.Tm.C","Winter.Tm.re.C","Winter.Tm.me.C"
+                         ,"Annual.Tm.C","Annual.Tm.re.C","Annual.Tm.me.C"
+                         ,"Total radiation")
 Output.tank[1,2] <- Location
 Output.tank[2:3,2] <- c(Au,M.depth)        #area and initial depth, m2 and m
 Output.tank[4,2] <- as.numeric(Output.tank[2,2])*as.numeric(Output.tank[3,2]) #starting volume.
@@ -196,8 +200,13 @@ Output.tank[15,2] <- max(Output$Temperature.C)  #Max manure Temperature
 Output.tank[16,2] <- min(Output$Temperature.C)  #Min manure Temperature
 Output.tank[18,2] <- max(Output$Depth.cm)       #Maximum Manure Depth
 Output.tank[19,2] <- sum(Output$`snow depth`)       #Maximum Manure Depth
-
-
+Output.tank[c(20,21,22),2] <- c(mean(Summer.sim.og$Temperature.C),mean(Summer.sim$Temperature.C),
+                                mean(Summer.obs$temp.avg))
+Output.tank[c(23,24,25),2] <- c(mean(Winter.sim.og$Temperature.C),mean(Winter.sim$Temperature.C),
+                                mean(Winter.obs$temp.avg))
+Output.tank[c(26,27,28),2] <- c(mean(sim.og$Temperature.C),mean(sim.re$Temperature.C),
+                                mean(obs$temp.avg))
+Output.tank[29,2] <- sum(Output$`total radiation`)/12/277.77778
 
 #write the results out
 library(xlsx)
@@ -218,11 +227,11 @@ write.xlsx(sim.re,
                           test,".xlsx",sep = ""),
              sheetName = "Output.re", row.names = F, append = TRUE)
 
-write.xlsx(stat.avg,
+write.xlsx(format(stat.avg,digit = 2),
            file = paste(result,Location,"/stat/",Location,"_",
                         test,".xlsx",sep = ""),
                sheetName = "overall stat", row.names = F, append = TRUE)
-write.xlsx(stat.avg.depth,
+write.xlsx(format(stat.avg.depth,digit =2),
            file = paste(result,Location,"/stat/",Location,"_",
                         test,".xlsx",sep = ""),
            sheetName = "stat by depth", row.names = F,append = TRUE)
