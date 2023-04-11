@@ -20,13 +20,13 @@ for (j in 1:29) {
   delta.zd[30] <- 0
 }
 delta.zu <- c(0,delta.zd[1:29])
-M.volume <- Au*delta.z                   # calculate manure volume, m3, T60-T89, 
-M.volume.current <- sum(M.volume)        # current volume,L42
-time.weight <- T.delta/(rho.m*M.volume)  # V60:V89  
+M.volume <- Au*delta.z                   # calculate manure volume, m3 
+M.volume.current <- sum(M.volume)        # current volume
+time.weight <- T.delta/(rho.m*M.volume)    
 
 VT <- ini.M.Temp*M.volume                      # Initial temp x volume
-Avg.M.temp <- sum(VT)/sum(M.volume) - 273.15   # avg. manure temp, F86 , degree C
-suf.M.temp <- ini.M.Temp[1] - 273.15           # surface manure temp, F87,  degree C
-mid.M.temp <- mean(ini.M.Temp[15:16]) - 273.15 # middle manure temp, F88 , degree C
-bot.M.temp <- ini.M.Temp[30] - 273.15          # Bottom manure temp, F89 , degree C  
+Avg.M.temp <- sum(VT)/sum(M.volume) - 273.15   # avg. manure temp, degree C
+suf.M.temp <- ini.M.Temp[1] - 273.15           # surface manure temp, degree C
+mid.M.temp <- mean(ini.M.Temp[15:16]) - 273.15 # middle manure temp, degree C
+bot.M.temp <- ini.M.Temp[30] - 273.15          # Bottom manure temp, degree C  
 

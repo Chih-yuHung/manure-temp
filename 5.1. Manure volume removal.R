@@ -1,5 +1,5 @@
 #manure depth adjustment
-#daily changing depth of manure for next day, L32<-L37
+#daily changing depth of manure for next day
 M.depth <- M.depth + depthchange.d
 Zmmax <- M.depth    
 print(M.depth)

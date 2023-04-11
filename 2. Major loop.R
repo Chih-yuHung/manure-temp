@@ -26,13 +26,11 @@ for (i in 1:d.length) {
 
   #To calculate manure volume, encoding to be change if use mac
   source("5. Manure volume.R",echo = F)
-  #print(paste("after volume",Sys.time()-starttime))
   #To calculate solar radiation, soil temp, and manure temp at 300 sec steps.
   source("6. Solar radiation and soil temp_shade.R",echo = F)
-    #To calculate enthalpy.
+  #To calculate enthalpy.
   source("6.1 Enthalpy calculation.R",echo = F)
   cat(paste("snow depth =",snow, sep = ""))
-  #print(paste("after solar",Sys.time()-starttime))
   #To calculate final hourly temp
   source("7. hourly temp.R",echo = F)
   #retrieve manure temperature at 0.5m, 1.5m and 2.5 m

@@ -1,7 +1,7 @@
 #Enthalpy calculation
 
-#Temp and depth adjustment, F200:Q238
-#Current enthalpy, J209:J238
+#Temp and depth adjustment
+#Current enthalpy
 Enthalpy.c <- ifelse(M.Temp[,288] < f.point,M.Temp[,288]*rho.m*M.volume*C.pm/10^6
                    ,ifelse(M.Temp[,288] >= t.point,(f.point*rho.m*M.volume*C.pm + rho.m*M.volume*C.pm.fusion + 
                                                       (M.Temp[,288] - t.point)*rho.m*M.volume*C.pm)/10^6
@@ -10,9 +10,7 @@ Enthalpy.c <- ifelse(M.Temp[,288] < f.point,M.Temp[,288]*rho.m*M.volume*C.pm/10^
 if (submodels == 1) {
   #incoming manure temp.
   In.M.temp <- Avg.Barn.temp + Barn.temp.amp*sin(2*pi/365*T.day + Temp.cost) # Incoming manure temp
-  #which.min(abs(0.5 - seq(M.depth,0,length.out = 30)))
-  #In.M.temp <- M.Temp[which.min(abs(0.5 - seq(M.depth,0,length.out = 30))),288]-273.15
-  
+ 
   #daily depth change
   depthchange.d <- if (i %% mixing.day == 0) {
     sum(M.daily[(i - mixing.day + 1):i]) + precip.d - Evap.depth.d
@@ -40,15 +38,15 @@ if (submodels == 1) {
 } else {
   #Situation in submodel = 0
   In.M.temp <- 16  
-   #15.6 is an optimal temperature for growing pigs. 
-  depthchange.d <- M.daily[i] + precip.d - Evap.depth.d #L34
-  depth.factor <- depthchange.d/M.depth                   #N204
-  delta.z.new <- delta.z*(1 + depth.factor)                 #L209:238
-  M.volume.new <- delta.z.new*Au                          #new manure volume,M209:M238
-  #Enthalpy after manure added, N209:N238
+  #16 is an optimal temperature for growing pigs. 
+  depthchange.d <- M.daily[i] + precip.d - Evap.depth.d 
+  depth.factor <- depthchange.d/M.depth                   
+  delta.z.new <- delta.z*(1 + depth.factor)               
+  M.volume.new <- delta.z.new*Au                         #new manure volume
+  #Enthalpy after manure added
   Enthalpy.c.new <- Enthalpy.c + (M.volume.new - M.volume) *
     rho.m*((In.M.temp*C.pm) + 272.15*C.pm + C.pm.fusion)/1000000
-  Enthalpy.V <- Enthalpy.c.new/M.volume.new  #Enthalpy/V, O209:O238
+  Enthalpy.V <- Enthalpy.c.new/M.volume.new  #Enthalpy/V
 }
 
 #Final temp after depth adjustment,

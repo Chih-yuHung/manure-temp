@@ -54,7 +54,7 @@ aa<-as.data.frame(cbind(AirTmax1,AirTmin1,AirTmin2,AirTmax0,SR,Srmax,precip,RH.6
 DAY<-as.character(as.Date(0:1094,origin = "2020-05-1"))
 DAY<-as.data.frame(matrix(unlist(strsplit(DAY,split="-")),ncol=3,byrow=TRUE))
 colnames(DAY)<-c("Year","Month","Day")
-DAY$DOY<-rep(c(166:365,1:165),3)
+DAY$DOY<-rep(c(121:365,1:120),3)
 
 #combind together
 env.input<-cbind(DAY,aa)

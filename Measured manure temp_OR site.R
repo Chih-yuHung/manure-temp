@@ -91,15 +91,6 @@ for (i in 1:length(temp.daily$DOY)){
 }
 
 
-# #to integrate soil temperature data 
-# temp<-read.csv("C:/Users/hungc/OneDrive - AGR-AGR/AAFC/Project 3_Sweden/3. Results/raw/Soil temp.csv",header=T)
-# Stemp10<-tapply(temp$Stemp10,temp$Date,mean)
-# Stemp50<-tapply(temp$Stemp50,temp$Date,mean)
-# temp.no.daily<-cbind(temp.no.daily,Stemp10[1:344],Stemp50[1:344])
-# temp.cover.daily<-cbind(temp.cover.daily,Stemp10[1:344],Stemp50[1:344])
-# colnames(temp.cover.daily)[13:14]<-c("Stemp10","Stemp50")
-# colnames(temp.no.daily)[13:14]<-c("Stemp10","Stemp50")
-
 #The data is from 4/30-Feb27, But I want to have May 1 - Apr30
 #I left Feb 28 -Apr 30 empty. 
 DAY<-as.character(as.Date(0:61,origin = "2021-02-28"))
