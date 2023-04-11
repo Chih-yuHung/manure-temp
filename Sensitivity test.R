@@ -9,8 +9,8 @@ Height <- c(6,5,4,3)             #height of tank
 M.depth <- 2                    #fixed manure depth
 ri <- c(5,10,15,20)            #Inner radius of tank, m, B32
 Eb <- 1395                      #extraterrestrial solar flux density, W m-2
-tau <- 0.75                     #Atmospheric transimttance, 0.75 clear, 0.4 overcast
-A <- 7.3                        #altitude, m
+tau <- 0.75                     #Atmospheric transmittance, 0.75 clear, 0.4 overcast
+A <- 14                        #altitude, m
 Pa <- 101325*exp(-A/8200)                     # Local air pressure, Pa
 T.day.light <- matrix(1:365*4,nrow=365,ncol=4,byrow = T) #save the daily light.d
 data <- list() #for the first column, diameter changes
@@ -98,16 +98,30 @@ for (k in 1:4) { #latitude
 }
 
 #data [[1:4]] for diameter, data [[5:8]] for heights
+#calculate cumulative radiation
+data.cum <- data.frame(row.names = c("lat25","lat35",
+                                     "lat45","lat55"),
+                       d10 = rep(0,4),d20 = rep(0,4),
+                       d30 = rep(0,4),d40 = rep(0,4),
+                       h6 = rep(0,4),h5 = rep(0,4),
+                       h4 = rep(0,4),h3 = rep(0,4)
+                       )
+for (k in 1:4) {
+data.cum[k,1:4] <- round(colSums(data[[k]]),0)
+}
+for (k in 5:8) {
+  data.cum[k-4,5:8] <- round(colSums(data[[k]]),0)
+}
 
 
-#export at 1100 X 600 
+
 #two columns, 1 col with 4 rows (4 latitudes x 4 diameters)
 # 2 col with 4 rows (4 latitudes x 4  wall heights)
 #cols <- c("#211d0c","#8077ff","#fcab42","#42bd42")
 cols <- c("#5A4F20","#9EACD5","#F6B8A1","#94D1A9")
 plot.sens <- function() {
 par(mfcol=c(4,2), mar = c(2,2,1,1),oma= c(4,5,0,0))
-for (k in 1:8){
+for (k in c(5:8,1:4)){
 plot(0,type="l",ylim=c(0,35),
      xlim=c(0,366),las=1,cex.axis=1,
      yaxs="i",xaxs="i",
@@ -120,7 +134,7 @@ ifelse(k==1,legend(40,20,c("10m","20m","30m","40m"),
                    title="Tank diamter",bty="n",ncol=2),NA)
 ifelse(k==5,legend(40,20,c("6m","5m","4m","3m"),
                    col=cols,lty=2,cex=1.3,lwd=1,
-                   title="Tank height ",bty="n",ncol=2),NA)
+                   title="Tank wall height ",bty="n",ncol=2),NA)
 if (k <=4) {
   for (i in 1:4) {
      lines(data[[k]][,i],col=cols[i],

@@ -39,7 +39,7 @@ if (submodels == 1) {
   
 } else {
   #Situation in submodel = 0
-  In.M.temp <- 15.6 #Avg.Barn.temp + Barn.temp.amp*sin(2*pi/365*T.day + Temp.cost) 
+  In.M.temp <- 16  
    #15.6 is an optimal temperature for growing pigs. 
   depthchange.d <- M.daily[i] + precip.d - Evap.depth.d #L34
   depth.factor <- depthchange.d/M.depth                   #N204

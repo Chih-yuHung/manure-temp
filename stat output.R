@@ -12,6 +12,7 @@ obs.n <- nrow(na.omit(obs))
 obs <- obs[1:obs.n,]
 sim.og <- sim.og[1:obs.n,]
 sim.re <- sim.re[1:obs.n,]
+Envir.obs <- Envir.daily[1:obs.n,]
 
 obs$DOY[which(leap_year(obs$Year))] <- obs$DOY[which(leap_year(obs$Year))]-1
 
@@ -28,6 +29,18 @@ Winter.obs <- rbind(obs[356 <= obs$DOY,],
 obs.y      <- list(obs[1:obs.n,], 
                          Spring.obs, Summer.obs
                          ,Fall.obs, Winter.obs)
+#Avg. temp for Table S2
+obs.avg <- data.frame(temp0.5 = rep(0,5),
+                      temp1.5 = rep(0,5),
+                      temp2.5 = rep(0,5),
+                      tempavg = rep(0,5),
+                      row.names = c("year","spring",
+                                    "summer","fall",
+                                    "winter"))
+for (i in 1:5) {
+obs.avg[i,1:3] <- round(colMeans(obs.y[[i]][,6:8]),1)
+obs.avg[i,4] <- round(mean(obs.y[[i]][,13]),1)
+}
 
 #The simulation results from original model 
 Spring.sim.og <- sim.og[80 <= sim.og$DOY & sim.og$DOY <= 171,]
@@ -39,6 +52,20 @@ sim.og.y <- list(sim.og[1:obs.n,],
                        Spring.sim.og, Summer.sim.og
                        ,Fall.sim.og, Winter.sim.og)
 
+#Avg. temp for Table S2
+sim.og.avg <- data.frame(temp0.5 = rep(0,5),
+                         temp1.5 = rep(0,5),
+                         temp2.5 = rep(0,5),
+                         tempavg = rep(0,5),
+                         row.names = c("year","spring",
+                                    "summer","fall",
+                                    "winter"))
+for (i in 1:5) {
+  sim.og.avg[i,1:3] <- round(colMeans(sim.og.y[[i]][,13:15]),1)
+  sim.og.avg[i,4] <- round(mean(sim.og.y[[i]][,6]),1)
+}
+
+
 #The simulation results with revised model
 Spring.sim <- sim.re[80 <= sim.re$DOY & sim.re$DOY <= 171,]
 Summer.sim <- sim.re[172 <= sim.re$DOY & sim.re$DOY <= 265,]
@@ -49,15 +76,36 @@ sim.re.y <- list(sim.re[1:obs.n,],
                     Spring.sim, Summer.sim
                     ,Fall.sim, Winter.sim)
 
+#Avg. temp for Table S2
+sim.avg <- data.frame(temp0.5 = rep(0,5),
+                      temp1.5 = rep(0,5),
+                      temp2.5 = rep(0,5),
+                      tempavg = rep(0,5),
+                      row.names = c("year","spring",
+                                    "summer","fall",
+                                    "winter"))
+for (i in 1:5) {
+  sim.avg[i,1:3] <- round(colMeans(sim.re.y[[i]][,13:15]),1)
+  sim.avg[i,4] <- round(mean(sim.re.y[[i]][,6]),1)
+}
+
+
 #Descriptive stat data
 summary(obs$temp0.5) #VA:-0.8 to 20.3, OR:-0.4 to 21.4
 summary(obs$temp2.5) #VA:2.5 to 16.5, OR: 0.6 to 19.7
 summary(obs$temp.avg) #VA: 8.6, OR: 10.9
 mean(Summer.obs$temp.avg) #VA:15.4  ,OR:17.2
-Summer.air <- Envir.daily[172 <= Envir.daily$DOY & Envir.daily$DOY <= 265,]
-mean((Summer.air$AirTmax1+Summer.air$AirTmin1)/2) #VA:15.0   OR:14.5
-
-
+#This is adjust to obtian air temperature during study period only.
+Spring.air <- Envir.obs[80 <= Envir.obs$DOY & Envir.obs$DOY <= 171,]
+mean((Spring.air$AirTmax1+Spring.air$AirTmin1)/2) #VA:5.7   OR:11.0
+Summer.air <- Envir.obs[172 <= Envir.obs$DOY & Envir.obs$DOY <= 265,]
+mean((Summer.air$AirTmax1+Summer.air$AirTmin1)/2) #VA:15.0   OR:16.2
+Fall.air <- Envir.obs[266 <= Envir.obs$DOY & Envir.obs$DOY <= 355,]
+mean((Fall.air$AirTmax1+Fall.air$AirTmin1)/2) #VA:6.2   OR:6.7
+Winter.air <- rbind(Envir.obs[356 <= Envir.obs$DOY,],
+                    Envir.obs[Envir.obs$DOY <= 79,])
+mean((Winter.air$AirTmax1+Winter.air$AirTmin1)/2) #VA:-2.2   OR:-2.6
+mean((Envir.obs$AirTmax1+Envir.obs$AirTmin1)/2) #VA: 6.4 OR:8.3
 
 #A table for RMSE, d, R2, bias
 stat.avg <- data.frame(Depth = c("sample size",rep(c("Avg.","0.5 m","1.5 m", "2.5 m"),each = 4)),
@@ -211,11 +259,9 @@ Output.tank[29,2] <- sum(Output$`total radiation`)/12/277.77778
 #write the results out
 library(xlsx)
 manure.pic <- paste(result,Location,"/figures/png/",Location,"_",test,".png",sep = "")
-depth.pic <- paste(result,Location,"/figures/png/",Location,"_",test,"_depth.png",sep = "")
 wb <- createWorkbook()
 sheet <- createSheet(wb, "pic")
 addPicture(manure.pic, sheet, startRow = 1, startColumn = 1)
-addPicture(depth.pic, sheet, startRow = 1, startColumn = 20)
 saveWorkbook(wb, file = paste(result,Location,"/stat/",Location,"_",
 test,".xlsx",sep = ""), password = NULL)
 write.xlsx(sim.og,

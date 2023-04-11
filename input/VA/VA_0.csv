@@ -1,0 +1,9 @@
+parameter,eoffaaaa,Start date,End date,removal start date,removal end date,mixing day and outlet height from the bottom (m),Htank,ri,"annual manure input (m3), pig amount (pigs), wash water per pig (kg)",manure input factor,feeder days,Freeboard,Sludge,Initial manure depth,manure volume removed,Total volatile solid,"Income manure Temp, amplitude, and phase constant",Latitude,Solar absorptivity,Extraterrestrial solar flux density,Atmospheric transimttance,Altitude,Emissivity,Soil density,Soil thermal conductivity ,Soil specific heat,air thermal conductivity,Teten's constant,freezing and thawing point,"snow min crit, max crit, melt r, sublimation threshold, sublimation r"
+value,VA,6/18/2020,6/17/2023,10/19/2020,10/20/2020,5,3,10,1750,0.9,119,0.3,0.5,0.6,600,8,11,59.557972,0.85,1395,0.75,7.3,0.95,1800,1.5,1220,0.045,0.611,272.45,-12
+,,,,4/26/2021,4/30/2021,3,,,1540,0.8,,,,,950,,1,,,,,,,,,,,16.6269,273.15,2
+,,,,10/19/2020,10/20/2020,,,,10,1,,,,,,,4.32,,,,,,,,,,,253.0185,,0.052
+,,,,4/26/2021,4/30/2021,,,,,,,,,,,,,,,,,,,,,,,21.87,,2
+,,,,10/19/2021,10/20/2021,,,,,,,,,,,,,,,,,,,,,,,265.5,,0.25
+,,,,4/26/2022,4/30/2022,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,10/19/2022,10/20/2022,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,4/26/2023,4/30/2023,,,,,,,,,,,,,,,,,,,,,,,,,

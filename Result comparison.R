@@ -11,6 +11,7 @@ temp <- ((Envir.daily$AirTmax1 + Envir.daily$AirTmin1)/2)[731:1095] #Air Temp.av
 
 #observed data
 obs <- read.csv(paste(result,Location,"/",Location,".daily.csv",sep = ""),header = T) 
+depth.m <- read.csv(paste(result,Location,"/",Location,".depth.csv",sep = ""),header = T)
 
 #simulated data before calibration
 sim.og <- read.csv(paste(result,Location,"/original/",
@@ -30,11 +31,11 @@ removal.a <- removal.start[1:4] - as.numeric(as.Date(start.date)) + 1
 
 #two data.frame for the days in VA and OR sites
 OR.date <- data.frame(day = c(1,62,124,185,246,305,366), 
-                      date = c("5/1/2020","7/1","9/1","11/1",
-                               "1/1/2021","3/1","5/1"))
+                      date = c("5/1/20","7/1","9/1","11/1",
+                               "1/1/21","3/1","5/1"))
 VA.date <- data.frame(day = c(1,45,106,167,228,286,348),
-                      date = c("6/18/26020","8/1","10/1","12/1",
-                               "2/1/2021","4/1","6/1"))
+                      date = c("6/18/20","8/1","10/1","12/1",
+                               "2/1/21","4/1","6/1"))
 
 
 if (Location == "OR") {
@@ -45,11 +46,12 @@ if (Location == "OR") {
   plot.date <- VA.date$date
 }
 
-cols <- c("#211d0c","#8077ff","#fcab42","#42bd42")
+#cols <- c("#211d0c","#8077ff","#fcab42","#42bd42")
+cols <- c("#5A4F20","#9EACD5","#F6B8A1","#94D1A9")
 
 #plots for the measured manure temperature (Air, Avg. and the 3 depths)
 plot.measurement <- function() {
-par(mar = c(4,5,1,1),oma = c(3,0,0,0))
+par(mar = c(4,5,1,4),oma = c(2,0,0,2))
 plot(temp,type = "l",
      xaxt = 'n',col = "grey",
      ylim = c(-15,30),xlab = "",
@@ -68,28 +70,52 @@ lines(obs$temp2.5,
 lines(obs$temp.avg,
       type = "l",lwd = 3,
       col = cols[1]) #manure avg. obs temperature
-legend(160,30,c("Tair","Avg. Tm","Tm at 0.5m","Tm at 1.5m ",
-                 "Tm at 2.5m"),
-       col = c("grey",cols),
-       lty = c(3,1,5,4,3),lwd = 3,
-       bty = "n",cex = 1.5)
+legend(-23,-12,c("Tair"),
+       col = "grey",
+       lty = 3,lwd = 3,
+       bty = "n",cex = 1.5, x.intersp = 0) #160,30
+legend(25,-12,c("Avg. Tm","Tm (0.5m)","Tm (1.5m)",
+                 "Tm (2.5m)"),
+       col = cols,
+       lty = c(1,5,4,3),lwd = 3,
+       bty = "n",cex = 1.5,xjust = 0,
+       horiz = T, x.intersp = 0,
+       text.width = 45) #160,30
 for (i in 1:length(removal.a)) {#removal dates
-  arrows(removal.a[i],-5,removal.a[i],-1) 
+  arrows(removal.a[i],-12,removal.a[i],-7) 
 }
 axis(side = 1, at = plot.day,
      cex.axis = 1.5,lwd.ticks = 2,tck = -0.03,mgp = c(0,2,0),
      labels = plot.date)
-mtext(expression(paste("Temperature (",degree,"C)",
+mtext(expression(paste("Temperature ( ",degree,"C)",
                 sep = "")),
       side = 2,line = 3, cex = 1.5)
 mtext("Date",side = 1,line = 4, cex = 1.5)
 text(5,28, paste(Location," tank",sep = ""),
      cex = 1.5,pos = 4)
+#Measured manure depth and temperature profile
+if(Location == "VA"){
+points(depth.m[,1],
+       depth.m[,2]*(45/300)-15,cex = 2,lwd = 2, pch = 20)
+axis(side = 4, at = c(-15,0,15,30),
+       cex.axis = 1.5,lwd.ticks = 2,tck = -0.03,mgp = c(0,1,0),
+       labels = c(0,100,200,300),las=1)
+} else {
+points(depth.m[,1],
+         depth.m[,2]*(45/360)-15,cex = 2,lwd = 2, pch = 20)
+axis(side = 4, at = c(-15,0,15,30),
+       cex.axis = 1.5,lwd.ticks = 2,tck = -0.03,mgp = c(0,2,0),
+       labels = c(0,120,240,360))
 }
+mtext("Manure depth (cm)",
+      side = 4,line = 3.5, cex = 1.5)
+}
+
+
 
 #For simulated manure temperature
 plotoutput <- function() {
-par(mfrow = c(3,1), mar = c(4,8.5,1,6),oma = c(3,0,0,0))
+par(mfrow = c(4,1), mar = c(4,8.5,1,6),oma = c(3,0,0,0))
 #A. Temperature
 plot(temp,type = "l",xaxt = 'n',col = "grey",ylim = c(-16,30)
      ,xlab = "",ylab = "",las = 1,cex.axis = 2,
@@ -102,7 +128,7 @@ lines(sim.og$Temperature.C[1:length(temp)],
 lines(sim.re$Temperature.C[1:length(temp)],
       col = cols[2],
       lwd = 3)                #with shade calibration
-legend(115,30,c("Tair","Tm meausrement","Tm model","Tm revised model"),
+legend(115,30,c("Tair","Tm measurement","Tm model","Tm revised model"),
        col = c("grey",cols[c(1,2,2)]),
        lty = c(2,1,3,1),lwd = 3,ncol = 2,
        bty = "n",cex = 2.5,
@@ -116,7 +142,27 @@ arrows(removal.a[i],-15,removal.a[i],-10)
 mtext(expression(paste("Temperature (",degree,"C)",sep = "")),side = 2,line = 3, cex = 2)
 text(5,28, paste(Location," tank",sep = ""), cex = 2.5,pos = 4)
 
-#B. Solar radiation and albedo
+#B. Manure depth
+plot(sim.re$Depth.cm,type = "l",
+     ylim = c(0,350),xaxt = 'n',
+     col = "black",xlab = "",
+     ylab = "", las = 2,
+     cex = 3, cex.lab = 2, cex.axis = 2, font = 2 )
+points(depth.m[,1],
+       depth.m[,2],cex = 2,lwd = 2, pch = 20)
+for (i in 1:4) {#removal dates
+  arrows(removal.a[i],5,removal.a[i],35)
+}
+axis(side = 1, at = plot.day,
+     cex.axis = 2,lwd.ticks = 2,tck = -0.03,mgp = c(0,2,0),
+     labels = plot.date, font = 2)
+mtext("Date",line = 1 , cex = 2.5,side = 1,
+      outer = T)
+mtext("Depth (cm)",side = 2,cex = 2,line = 5)
+text(5,320, paste(Location," tank",sep = ""), cex = 2.5,pos = 4)
+
+
+#C. Solar radiation and albedo
 plot(SR.og.cum,type = "l",
      col = cols[1],lty = "dotted",
      xaxt = "n",yaxt = "n",
@@ -151,7 +197,7 @@ legend(1,3250,
        cex = 2.5)
 text(5,3300, paste(Location," tank",sep = ""), cex = 2.5,pos = 4)
 
-#C. Evaporation, snow cover, precipitation 
+#D. Evaporation, snow cover, precipitation 
 plot(sim.re$snow.depth/10,
      type = "l",
      lty = "dashed",xaxt = "n",
@@ -188,59 +234,28 @@ text(5,4.7, paste(Location," tank",sep = ""), cex = 2.5,pos = 4)
 
 }
 
-plot.depth <- function() {
-#Manure depth
-plot(sim.re$Depth.cm,type = "l",
-     ylim = c(0,350),xaxt = 'n',
-     col = "black",xlab = "",
-     ylab = "", las = 2,
-     cex = 3, cex.lab = 2, cex.axis = 2, font = 2 )
-#retrieved from measurement data
-depth.m <- read.csv(paste(result,Location,"/",Location,".depth.csv",sep = ""),header = T)
-points(depth.m[,1],
-       depth.m[,2],cex = 3,lwd = 3)
-for (i in 1:4) {#removal dates
-  arrows(removal.a[i],10,removal.a[i],40)
-}
-axis(side = 1, at = plot.day,
-     cex.axis = 2,lwd.ticks = 2,tck = -0.03,mgp = c(0,2,0),
-     labels = plot.date, font = 2)
-mtext("Date",line = 1 , cex = 2.5,side = 1,
-      outer = T)
-mtext("Depth (cm)",side = 2,cex = 2,line = 5)
-text(5,320, paste(Location," tank",sep = ""), cex = 2.5,pos = 4)
-}
 
 #Measurement data
 png(file = paste(result,Location,"/figures/png/",Location,"_measurement.png",sep = "")
-    ,width = 800, height = 600)
+    ,width = 1000, height = 600)
 plot.measurement()
 dev.off()
 
 emf(file = paste(result,Location,"/figures/",Location,"_measurement.emf",sep = "")
-    ,width = 8, height = 6,emfPlus = FALSE, family = "Calibri")
+    ,width = 10, height = 6,emfPlus = FALSE, family = "Calibri")
 plot.measurement()
 dev.off()
 
 #Simulated data
 png(file = paste(result,Location,"/figures/png/",Location,"_",test,".png",sep = "")
-    ,width = 1200, height = 1800)
+    ,width = 1200, height = 2400)
 plotoutput()
 dev.off()
 
 emf(file = paste(result,Location,"/figures/",Location,"_",test,".emf",sep = "")
-    ,width = 12, height = 18,emfPlus = FALSE, family = "Calibri")
+    ,width = 12, height = 24,emfPlus = FALSE, family = "Calibri")
 plotoutput()
 dev.off()
 
-#Simulated depth data
-png(file = paste(result,Location,"/figures/png/",Location,"_",test,"_depth.png",sep = "")
-    ,width = 1200, height = 600)
-plot.depth()
-dev.off()
 
-emf(file = paste(result,Location,"/figures/",Location,"_",test,"_depth.emf",sep = "")
-    ,width = 12, height = 6,emfPlus = FALSE, family = "Calibri")
-plot.depth()
-dev.off()
 
