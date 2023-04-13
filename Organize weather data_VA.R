@@ -63,6 +63,9 @@ env.input<-cbind(DAY,aa)
 write.csv(env.input,"C:/Users/hungc/OneDrive - AGR-AGR/AAFC/Project 3_Sweden/2. Method/input/daily env input_Fittja_May1.csv",row.names = FALSE)
 write.csv(env.input,"input/daily env input_Fittja_May1.csv",row.names = FALSE)
 
+#Wind speed in summer season Summer: 172-265 (June 20,2020,Sept 21)
+wind.summer <- env.input[172 <= env.input$DOY & env.input$DOY <= 265,]
+mean(wind.summer$wind) #2.6 m/s
 
 #Obtain yearly amplitude and daily amplitude, wind speed
 yearly.amp<-(max(env.input$AirTmax1)-min(env.input$AirTmin1))/2 #24.95
