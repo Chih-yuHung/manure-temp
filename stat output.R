@@ -2,8 +2,8 @@
 #Site: Fittja,i.e. Orsundsbro(OR), site.
 #Four stats: RMSE, D, R2 and bias
 #five time period: annual, summer, fall, winter, spring. 
-#Spring: 122-171 (May 1, 2020-June 19,2020), Summer: 172-265 (June 20,2020,Sept 21)
-#Fall: 266-355 (Sept 22, 2020-Dec 20,2020), Winter:356-58 (Dec 21,2020-Feb 27, 2021)
+#Spring: 80-171 (March 20, 2020-June 19,2020), Summer: 172-265 (June 20,2020,Sept 21)
+#Fall: 266-355 (Sept 22, 2020-Dec 20,2020), Winter:356-79 (Dec 21,2020-Mar 20, 2021)
 #2020 is a leap year
 library(lubridate)
 

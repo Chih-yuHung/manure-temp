@@ -48,9 +48,9 @@ for (k in 1:4) { #latitude
         light.d <- 1-(shadow/Au)                                # the percentage that sunlight on the surface, between 0-1
         light.d[is.nan(light.d)] <- 0
         ###End for shadow calculation
-        m <- ifelse(sin.alpha>0,Pa/(101325*sin.alpha),0)       # Optical air mass number, #F103-KG103
-        Sb <- ifelse(sin.alpha>0, Eb*(tau^m)*sin.alpha,0)      # solar bean radiation (W/m2),F104-KG104
-        Sd <- ifelse(sin.alpha>0,0.3*(1-tau^m)*Eb*sin.alpha,0) # Diffusive radiation (w/m2),F105-KG105
+        m <- ifelse(sin.alpha>0,Pa/(101325*sin.alpha),0)       # Optical air mass number
+        Sb <- ifelse(sin.alpha>0, Eb*(tau^m)*sin.alpha,0)      # solar bean radiation (W/m2)
+        Sd <- ifelse(sin.alpha>0,0.3*(1-tau^m)*Eb*sin.alpha,0) # Diffusive radiation (w/m2)
         q.net <- light.d*(Sb+Sd)
         T.day.light[j,i] <- mean(q.net)*(5/60)*288/1000*3.6 #(MJ/ m2 /d)
       }

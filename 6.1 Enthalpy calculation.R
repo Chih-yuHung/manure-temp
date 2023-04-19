@@ -37,7 +37,7 @@ if (submodels == 1) {
   
 } else {
   #Situation in submodel = 0
-  In.M.temp <- 18  
+  In.M.temp <- 18  #Pexas et al. 2021
   #16 is an optimal temperature for growing pigs. 
   depthchange.d <- M.daily[i] + precip.d - Evap.depth.d 
   depth.factor <- depthchange.d/M.depth                   

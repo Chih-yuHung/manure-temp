@@ -47,7 +47,6 @@ wind<-rep(temp1[10228:10592,17],3) #to obtain wind speed from 2020/5/1-2021/4/30
 precip<-rep(temp1$NED[10228:10592],3)
 precip<-ifelse(precip<0,0,precip) #there are some negative precip
 
-
 #combine the data together, it's daily value
 aa<-as.data.frame(cbind(AirTmax1,AirTmin1,AirTmin2,AirTmax0,SR,Srmax,precip,RH.6,RH.15,wind,cloud))
 
@@ -67,6 +66,15 @@ write.csv(env.input,"input/daily env input_Fittja_May1.csv",row.names = FALSE)
 #Wind speed in summer season Summer: 172-265 (June 20,2020,Sept 21)
 wind.summer <- env.input[172 <= env.input$DOY & env.input$DOY <= 265,]
 mean(wind.summer$wind) #2.6 m/s
+
+#precipitation in spring and fall season spring 80-171, fall 266-355
+precip.spring <- env.input[80 <= env.input$DOY & env.input$DOY <= 171,]
+sum(precip.spring$precip)/3 #60 mm 11%
+precip.summer <- env.input[172 <= env.input$DOY & env.input$DOY <= 265,]
+sum(precip.summer$precip)/3 #160 mm 30%
+precip.fall <- env.input[266 <= env.input$DOY & env.input$DOY <= 355,]
+sum(precip.fall$precip)/3 #173 mm 33%
+sum(env.input$precip)/3 #531 mm
 
 #Obtain yearly amplitude and daily amplitude, wind speed
 yearly.amp<-(max(env.input$AirTmax1)-min(env.input$AirTmin1))/2 #24.95

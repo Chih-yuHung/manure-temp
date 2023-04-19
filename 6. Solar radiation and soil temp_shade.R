@@ -130,4 +130,4 @@ if (snow > 0) {
   #https://doi.org/10.1038/s43247-020-00056-9
 }
 
-
+Evap.depth.d <- max(Evap.depth.d,0)
