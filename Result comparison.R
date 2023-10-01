@@ -2,9 +2,9 @@ library(devEMF)
 library(tidyverse)
 library(dplyr)
 library(hydroGOF) #NSE 
-#Sweden project-Fittja
+#Sweden project
 #To compare my simulation result to the measured data
-result <- "C:/Users/hungc/OneDrive - AGR-AGR/AAFC/Project 3_Sweden/3. Results/"
+result <- "C:/Dropbox/AAFC/Project 3_Sweden/3. Results/"
 #output to an excel file
 #Envir.daily <- read.csv(paste("input/daily env input_",Location,".csv",sep = ""),header = T)
 temp <- ((Envir.daily$AirTmax1 + Envir.daily$AirTmin1)/2)[731:1095] #Air Temp.avg
@@ -91,7 +91,7 @@ mtext(expression(paste("Temperature ( ",degree,"C)",
                 sep = "")),
       side = 2,line = 3, cex = 1.5)
 mtext("Date",side = 1,line = 4, cex = 1.5)
-text(5,28, paste(Location," tank",sep = ""),
+text(5,28, paste(Location," tank - Measurement",sep = ""),
      cex = 1.5,pos = 4)
 #Measured manure depth and temperature profile
 if(Location == "VA"){
@@ -140,7 +140,7 @@ for (i in 1:length(removal.a)) {#removal dates
 arrows(removal.a[i],-15,removal.a[i],-10) 
 }
 mtext(expression(paste("Temperature (",degree,"C)",sep = "")),side = 2,line = 3, cex = 2)
-text(5,28, paste(Location," tank",sep = ""), cex = 2.5,pos = 4)
+text(4,28, paste(Location," tank - Measurement vs. Model",sep = ""), cex = 2.5,pos = 4)
 
 #B. Manure depth
 plot(sim.re$Depth.cm,type = "l",
@@ -159,7 +159,7 @@ axis(side = 1, at = plot.day,
 mtext("Date",line = 1 , cex = 2.5,side = 1,
       outer = T)
 mtext("Depth (cm)",side = 2,cex = 2,line = 5)
-text(5,320, paste(Location," tank",sep = ""), cex = 2.5,pos = 4)
+text(4,320, paste(Location," tank - Measurement vs. Model",sep = ""), cex = 2.5,pos = 4)
 
 
 #C. Solar radiation and albedo

@@ -8,12 +8,12 @@
 library(lubridate)
 
 #force the simulation length = observation
-obs.n <- nrow(na.omit(obs))
+obs.n <- ifelse(Location == "OR", 303, 312)
 obs <- obs[1:obs.n,]
 sim.og <- sim.og[1:obs.n,]
 sim.re <- sim.re[1:obs.n,]
 Envir.obs <- Envir.daily[1:obs.n,]
-
+#remove the effect of leap year on DOY
 obs$DOY[which(leap_year(obs$Year))] <- obs$DOY[which(leap_year(obs$Year))]-1
 
 #organize data for the last year and seasons
@@ -93,11 +93,11 @@ for (i in 1:5) {
 #Descriptive stat data
 summary(obs$temp0.5) #VA:-0.8 to 20.3, OR:-0.4 to 21.4
 summary(obs$temp2.5) #VA:2.5 to 16.5, OR: 0.6 to 19.7
-summary(obs$temp.avg) #VA: 8.6, OR: 10.9
-mean(Summer.obs$temp.avg) #VA:15.4  ,OR:17.2
+summary(obs$temp.avg) #VA: 8.6, OR: 10.7
+mean(Summer.obs$temp.avg,na.rm=T) #Summer temperature VA:15.4, OR:17.2
 #This is adjust to obtian air temperature during study period only.
 Spring.air <- Envir.obs[80 <= Envir.obs$DOY & Envir.obs$DOY <= 171,]
-mean((Spring.air$AirTmax1+Spring.air$AirTmin1)/2) #VA:5.7   OR:11.0
+mean((Spring.air$AirTmax1+Spring.air$AirTmin1)/2) #VA:5.4   OR:11.0
 Summer.air <- Envir.obs[172 <= Envir.obs$DOY & Envir.obs$DOY <= 265,]
 mean((Summer.air$AirTmax1+Summer.air$AirTmin1)/2) #VA:15.0   OR:16.2
 Fall.air <- Envir.obs[266 <= Envir.obs$DOY & Envir.obs$DOY <= 355,]
@@ -119,34 +119,32 @@ stat.avg <- data.frame(Depth = c("sample size",rep(c("Avg.","0.5 m","1.5 m", "2.
                       )
 #the sample size
 for (i in 1:5) {
-stat.avg[1, c(2 * i + 1)] <- nrow(obs.y[[i]]) 
+stat.avg[1, c(2 * i + 1)] <- sum(!is.na(obs.y[[i]]$temp.avg)) 
 }
 
 #RMSE caculation only for the last year
 RMSE <- function(x,y){
- round(sqrt(sum((x - y)^2)/length(x)),2)
+  xy <- na.omit(cbind(x,y)) #to remove NA if need
+  round(sqrt(sum((xy[,1] - xy[,2])^2)/length(xy[,1])),2)
 }
 
 #D function
 D <- function(x,y){
-  x <- na.omit(x)
-  y <- na.omit(y)
-  ybar <- mean(y)
-  round(1 - (sum((x - y)^2)/sum((abs(x - ybar) + abs(y - ybar))^2)),2)
+  xy <- na.omit(cbind(x,y))
+  ybar <- mean(xy[,2])
+  round(1 - (sum((xy[,1] - xy[,2])^2)/sum((abs(xy[,1] - ybar) + abs(xy[,2] - ybar))^2)),2)
 }
 
 #R2 valeus
 rsq <- function(x, y) {
-  x <- na.omit(x)
-  y <- na.omit(y)
-  round(cor(x, y) ^ 2,2)
+  xy <- na.omit(cbind(x,y))
+  round(cor(xy[,1], xy[,2]) ^ 2,2)
   }
 
 #average bias valeus
 bias <- function(x, y) {
-  x <- na.omit(x)
-  y <- na.omit(y)
-  round(sum(x - y)/length(x),2)
+  xy <- na.omit(cbind(x,y))
+  round(sum(xy[,1] - xy[,2])/length(xy[,1]),2)
   }
 
 stat <- list(RMSE,D,rsq,bias)
