@@ -1,7 +1,7 @@
 # Introduction to the repo
   This repo showed our script to simulate manure temperatures in two tanks in Sweden.
-The manuscript "Measuring and modelling manure temperature at Swedish swine slurry storages" is submitted to Agriculture, Ecosystems & Environment on X, 2023. (Submission# will be provided). The authors are: Chih-Yu Hung, Kristina Mjöfors, Timothy Rennie, Brian Grant, Ward Smith, and Andrew VanderZaag. All author, except Kristina Mjöfors, is affliated with Agriculture and Agri-Food Canada, and Kristina is affliated with Research Institutes of Sweden (RISE).
-People who are interesting in this repo may contact Chih-Yu Hung (chih-yu.hung@mcgill.ca) and Andrew VanderZaag (andrew.vanderzaag@agr.gc.ca). 
+The manuscript "Manure temperature prediction for slurry storage in Sweden: Model validation inclduing effects of shading, snow cover and mixing" published in Biosystem Engineering 243 (2024) 70-81 (doi.org/10.1016/j.biosystemseng.2025.05.003). The authors are: Chih-Yu Hung, Kristina Mjöfors, Timothy Rennie, Brian Grant, Ward Smith, and Andrew VanderZaag. All author, except Kristina Mjöfors, is affliated with Agriculture and Agri-Food Canada, and Kristina is affliated with Research Institutes of Sweden (RISE).
+People who are interesting in this repo may contact Chih-Yu Hung (chih-yu.hung@mcgill.ca / chih-yu.hung@ec.gc.ca) and Andrew VanderZaag (andrew.vanderzaag@agr.gc.ca). 
 
 
 # Data input
